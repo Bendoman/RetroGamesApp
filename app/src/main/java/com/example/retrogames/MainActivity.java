@@ -21,10 +21,11 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity
 {
     private String username = "Anonymous";
-
-    public void setUsername(String username)
-    {
+    public void setUsername(String username) {
         this.username = username;
+    }
+    public String getUsername() {
+        return this.username;
     }
 
     @Override
@@ -36,11 +37,13 @@ public class MainActivity extends AppCompatActivity
         // Button to set username
         Button userNameButton = (Button) findViewById(R.id.userNameButton);
         EditText userNameField = (EditText) findViewById(R.id.userNameField);
-
         userNameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
+                String username = userNameField.getText().toString().toUpperCase();
+                MainActivity.this.setUsername(username);
+                Toast.makeText(MainActivity.this, "Username set to " + MainActivity.this.getUsername(), Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -49,7 +52,10 @@ public class MainActivity extends AppCompatActivity
         listButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 Intent intent = new Intent(MainActivity.this, GamesListActivity.class);
+                intent.putExtra("username", MainActivity.this.getUsername());
+
                 startActivity(intent);
             }
         });
