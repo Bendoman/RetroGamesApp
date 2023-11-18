@@ -1,22 +1,17 @@
 package com.example.retrogames;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
-import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
-import java.util.List;
+import com.example.retrogames.database.DAOs.UserDAO;
+import com.example.retrogames.database.UserDatabase;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -27,12 +22,18 @@ public class MainActivity extends AppCompatActivity
     public String getUsername() {
         return this.username;
     }
+    private UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Database setup
+        userDAO = Room.databaseBuilder(this, UserDatabase.class, "user-database")
+                .allowMainThreadQueries().build().getUserDAO();
+        System.out.println("test");
 
         // Button to set username
         Button userNameButton = (Button) findViewById(R.id.userNameButton);

@@ -2,11 +2,14 @@ package com.example.retrogames;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import org.w3c.dom.Text;
+import com.example.retrogames.gameActivities.SnakeActivity;
 
 public class GameInfo extends AppCompatActivity
 {
@@ -41,5 +44,15 @@ public class GameInfo extends AppCompatActivity
         gamePersonalHighScore.setText(personalHighScore);
         imageView.setImageResource(images[imageID]);
 
+        // Start game activity
+        Button playGame = (Button) findViewById(R.id.playGame);
+        playGame.setOnClickListener(new View.OnClickListener() {
+            // TODO Make this button start any of the game activities that are pressed not just snake
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(GameInfo.this, SnakeActivity.class);
+                startActivity(intent);
+            }
+        });
     }
 }

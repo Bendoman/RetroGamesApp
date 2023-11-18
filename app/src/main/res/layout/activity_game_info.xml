@@ -62,7 +62,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="84dp"
         android:layout_marginTop="12dp"
-        android:text="Global High Score"
+        android:text="Global High Score:"
         app:layout_constraintEnd_toEndOf="@+id/textView6"
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -82,7 +82,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:text="Personal High Score"
+        android:text="Personal High Score:"
         app:layout_constraintEnd_toEndOf="@+id/textView10"
         app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
@@ -96,7 +96,7 @@
         app:layout_constraintTop_toBottomOf="@+id/globalHighScoreField" />
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/playGame"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="36dp"
