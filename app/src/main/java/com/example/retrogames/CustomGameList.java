@@ -38,7 +38,7 @@ public class CustomGameList extends ArrayAdapter
         TextView highScoreTextView = (TextView) row.findViewById(R.id.highScoreTextView);
 
         gameTextView.setText(gameNames[position]);
-        highScoreTextView.setText(highScoreStrings[position]);
+        highScoreTextView.setText("Your high score: " + highScoreStrings[position]);
         gameImageView.setImageResource(images[position]);
 
         return row;

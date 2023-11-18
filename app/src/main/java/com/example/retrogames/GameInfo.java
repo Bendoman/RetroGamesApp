@@ -26,7 +26,7 @@ public class GameInfo extends AppCompatActivity
         TextView gameNameView = (TextView) findViewById(R.id.gameNameField);
         TextView gameDescriptionView = (TextView) findViewById(R.id.gameDescriptionField);
         TextView gameGlobalHighScore = (TextView) findViewById(R.id.globalHighScoreField);
-        TextView gamePersonalHighScore = (TextView) findViewById(R.id.personalHighScoreField);
+        TextView gameuserHighScore = (TextView) findViewById(R.id.userHighScoreField);
         ImageView imageView = (ImageView) findViewById(R.id.gameImageView);
 
         // Get values from bundle
@@ -35,21 +35,23 @@ public class GameInfo extends AppCompatActivity
         String gameName = b.getString("game");
         String description = b.getString("description");
         String globalHighScore = b.getString("globalHighScore");
-        String personalHighScore = b.getString("personalHighScore");
+        String userHighScore = b.getString("userHighScore");
 
         // Set values to views
         gameNameView.setText(gameName);
         gameDescriptionView.setText(description);
         gameGlobalHighScore.setText(globalHighScore);
-        gamePersonalHighScore.setText(personalHighScore);
+        gameuserHighScore.setText(userHighScore);
         imageView.setImageResource(images[imageID]);
 
         // Start game activity
         Button playGame = (Button) findViewById(R.id.playGame);
-        playGame.setOnClickListener(new View.OnClickListener() {
+        playGame.setOnClickListener(new View.OnClickListener()
+        {
             // TODO Make this button start any of the game activities that are pressed not just snake
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
                 Intent intent = new Intent(GameInfo.this, SnakeActivity.class);
                 startActivity(intent);
             }

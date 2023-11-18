@@ -16,7 +16,10 @@ public class User
     @ColumnInfo(name = "user_name")
     private String user_name;
 
-    private int snake_high_score = 0;
+    private double snake_high_score = 0;
+    private double breakout_high_score = 0;
+    private double tilter_high_score = 0;
+    private double pong_high_score = 0;
 
     // Getters and setters
     public String getUser_name() {
@@ -27,11 +30,35 @@ public class User
         this.user_name = user_name;
     }
 
-    public int getSnake_high_score() {
+    public double getBreakout_high_score() {
+        return breakout_high_score;
+    }
+
+    public void setBreakout_high_score(double breakout_high_score) {
+        this.breakout_high_score = breakout_high_score;
+    }
+
+    public double getPong_high_score() {
+        return pong_high_score;
+    }
+
+    public void setPong_high_score(double pong_high_score) {
+        this.pong_high_score = pong_high_score;
+    }
+
+    public double getTilter_high_score() {
+        return tilter_high_score;
+    }
+
+    public void setTilter_high_score(double tilter_high_score) {
+        this.tilter_high_score = tilter_high_score;
+    }
+
+    public double getSnake_high_score() {
         return snake_high_score;
     }
 
-    public void setSnake_high_score(int snake_high_score) {
+    public void setSnake_high_score(double snake_high_score) {
         this.snake_high_score = snake_high_score;
     }
 

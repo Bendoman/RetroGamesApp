@@ -5,6 +5,7 @@ import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -12,6 +13,9 @@ import android.widget.Toast;
 
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
+import com.example.retrogames.database.entities.User;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -22,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     public String getUsername() {
         return this.username;
     }
-    private UserDAO userDAO;
+    public UserDAO userDAO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -33,7 +37,6 @@ public class MainActivity extends AppCompatActivity
         // Database setup
         userDAO = Room.databaseBuilder(this, UserDatabase.class, "user-database")
                 .allowMainThreadQueries().build().getUserDAO();
-        System.out.println("test");
 
         // Button to set username
         Button userNameButton = (Button) findViewById(R.id.userNameButton);
@@ -50,13 +53,37 @@ public class MainActivity extends AppCompatActivity
 
         // Button to start games list activity
         Button listButton = (Button) findViewById(R.id.listButton);
-        listButton.setOnClickListener(new View.OnClickListener() {
+        listButton.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View view) {
+            public void onClick(View view)
+            {
+                String name = MainActivity.this.username;
+                UserDAO DAO = MainActivity.this.userDAO;
+                List<User> users = DAO.loadAllUsers();
+                Log.d("DEBUG", users.toString());
+
+                Boolean dbContatinsName = false;
+                for(int i = 0; i < users.size(); i++) {
+                    if (users.get(i).getUser_name().equals(name)) {
+                        dbContatinsName = true;
+                        break;
+                    }
+                }
+                if(!dbContatinsName)
+                {
+                    User user = new User();
+                    user.setUser_name(name);
+
+                    // TODO remove manual setting of high score here
+                    // Placeholder values for testing purposes
+                    user.setSnake_high_score(3000);
+
+                    DAO.insertUser(user);
+                }
 
                 Intent intent = new Intent(MainActivity.this, GamesListActivity.class);
                 intent.putExtra("username", MainActivity.this.getUsername());
-
                 startActivity(intent);
             }
         });
