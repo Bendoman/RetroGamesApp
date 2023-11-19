@@ -38,9 +38,9 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     private int score = 0;
 
-    private static final int segmentSize = 28;
+    private static final int segmentSize = 75;
     private static final int defaultSnakeLength = 3;
-    private static final int snakeSpeed = 800;
+    private static final int snakeSpeed = 700;
 
     private int randomXPosition, randomYPosition;
     private int fruitPositionX, fruitPositionY;
@@ -132,11 +132,11 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
         score = 0;
         direction = "right";
 
-        int startPosX = segmentSize * defaultSnakeLength;
+        int startPosX = 200;
 
         for(int i = 0; i < defaultSnakeLength; i++)
         {
-            SnakeSegment snakeSegment = new SnakeSegment(startPosX, segmentSize);
+            SnakeSegment snakeSegment = new SnakeSegment(startPosX, 500);
             snakeSegments.add(snakeSegment);
 
             startPosX = startPosX - segmentSize;
@@ -181,24 +181,21 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
                 switch (direction) {
                     case "right":
-                        snakeSegments.get(0).setPositionX(headPositionX + segmentSize);
-                        snakeSegments.get(0).setPositionY(headPositionY);
+                        snakeSegments.get(0).setPositionX(snakeSegments.get(0).getPositionX() + segmentSize);
                         break;
                     case "left":
-                        snakeSegments.get(0).setPositionX(headPositionX - segmentSize);
-                        snakeSegments.get(0).setPositionY(headPositionY);
+                        snakeSegments.get(0).setPositionX(snakeSegments.get(0).getPositionX() - segmentSize);
                         break;
                     case "up":
-                        snakeSegments.get(0).setPositionX(headPositionX + segmentSize);
-                        snakeSegments.get(0).setPositionY(headPositionY + segmentSize);
+                        snakeSegments.get(0).setPositionY(snakeSegments.get(0).getPositionY() - segmentSize);
                         break;
                     case "down":
-                        snakeSegments.get(0).setPositionX(headPositionX + segmentSize);
-                        snakeSegments.get(0).setPositionY(headPositionY - segmentSize);
+                        snakeSegments.get(0).setPositionY(snakeSegments.get(0).getPositionY() + segmentSize);
                         break;
                 }
 
-                if(checkGameOver(headPositionX, headPositionY)){
+                if(checkGameOver(headPositionX, headPositionY))
+                {
                     timer.purge();
                     timer.cancel();
 
@@ -210,10 +207,8 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             init();
-
                         }
                     });
-
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
@@ -229,25 +224,8 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
                     canvas.drawRect(snakeSegments.get(0).getPositionX(), snakeSegments.get(0).getPositionY(), snakeSegments.get(0).getPositionX() + segmentSize, snakeSegments.get(0).getPositionY() + segmentSize, segmentColor);
 
-                    canvas.drawRect(fruitPositionX, fruitPositionY, segmentSize, segmentSize, segmentColor);
-
-                    for(int i = 1; i < snakeSegments.size(); i++)
-                    {
-                        int tempPosX = snakeSegments.get(i).getPositionX();
-                        int tempPosY = snakeSegments.get(i).getPositionY();
-
-                        snakeSegments.get(i).setPositionX(headPositionX);
-                        snakeSegments.get(i).setPositionX(headPositionY);
-
-                        canvas.drawRect(snakeSegments.get(i).getPositionX(), snakeSegments.get(i).getPositionY(), snakeSegments.get(i).getPositionX() + segmentSize, snakeSegments.get(i).getPositionY() + segmentSize, segmentColor);
-
-                        headPositionX = tempPosX;
-                        headPositionY = tempPosY;
-                    }
-
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
-
             }
         }, 1000 - snakeSpeed, 1000 - snakeSpeed);
     }
@@ -260,4 +238,14 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
         boolean gameOver = false;
         return gameOver;
     }
+
+    @Override
+    public void onBackPressed()
+    {
+        timer.purge();
+        timer.cancel();
+
+        super.onBackPressed();
+    }
 }
+

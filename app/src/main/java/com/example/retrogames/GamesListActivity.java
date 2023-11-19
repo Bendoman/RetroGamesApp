@@ -2,9 +2,11 @@ package com.example.retrogames;
 
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
@@ -65,7 +67,11 @@ public class GamesListActivity extends AppCompatActivity
         // Setting header
         header = new TextView(this);
         header.setTypeface(Typeface.DEFAULT_BOLD);
-        header.setText("Username: " + username + "   |  List of Games");
+        header.setTextSize(20);
+        header.setPadding(35, 35, 35, 35);
+        header.setGravity(Gravity.CENTER);
+        header.setText("Username: " + username);
+        header.setBackgroundColor(Color.parseColor("#5400C2C9"));
 
         // Initializing list View
         listView = (ListView) findViewById(R.id.games_list);

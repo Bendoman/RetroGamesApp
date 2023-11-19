@@ -9,11 +9,14 @@
     android:paddingRight="@dimen/activity_vertical_margin"
     android:paddingTop="@dimen/activity_horizontal_margin"
     tools:context="com.example.retrogames.MainActivity"
+    android:background="@drawable/syth_background"
     >
 
     <ListView
         android:id="@+id/games_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:background="#55FFFFFF"
+        android:padding="15dp"
         />
 </RelativeLayout>
