@@ -77,7 +77,6 @@ public class MainActivity extends AppCompatActivity
 
                     // TODO remove manual setting of high score here
                     // Placeholder values for testing purposes
-                    user.setSnake_high_score(3000);
 
                     DAO.insertUser(user);
                 }

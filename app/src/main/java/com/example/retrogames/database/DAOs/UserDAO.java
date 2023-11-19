@@ -29,15 +29,6 @@ public interface UserDAO
     @Query("Select * FROM User WHERE user_name = :name")
     public User getUserByName(String name);
 
-    // user high scores
-    @Query("Select snake_high_score FROM User WHERE user_name = :name")
-    public double getUserSnakeHighScore(String name);
-    @Query("Select breakout_high_score FROM User WHERE user_name = :name")
-    public double getUserBreakoutHighScore(String name);
-    @Query("Select tilter_high_score FROM User WHERE user_name = :name")
-    public double getUserTilterHighScore(String name);
-    @Query("Select pong_high_score FROM User WHERE user_name = :name")
-    public double getUserPongHighScore(String name);
 
     // Global high scores
     @Query("Select MAX(snake_high_score) FROM User")

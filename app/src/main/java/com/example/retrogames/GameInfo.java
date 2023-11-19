@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,6 +14,10 @@ import com.example.retrogames.gameActivities.SnakeActivity;
 
 public class GameInfo extends AppCompatActivity
 {
+    // For detecting swipe gesture
+    private float x1,x2;
+    static final int MIN_DISTANCE = 150;
+
     // TODO remove this from here and have it passed dynamically
     private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
 
@@ -26,7 +31,7 @@ public class GameInfo extends AppCompatActivity
         TextView gameNameView = (TextView) findViewById(R.id.gameNameField);
         TextView gameDescriptionView = (TextView) findViewById(R.id.gameDescriptionField);
         TextView gameGlobalHighScore = (TextView) findViewById(R.id.globalHighScoreField);
-        TextView gameuserHighScore = (TextView) findViewById(R.id.userHighScoreField);
+        TextView gameUserHighScore = (TextView) findViewById(R.id.userHighScoreField);
         ImageView imageView = (ImageView) findViewById(R.id.gameImageView);
 
         // Get values from bundle
@@ -36,12 +41,13 @@ public class GameInfo extends AppCompatActivity
         String description = b.getString("description");
         String globalHighScore = b.getString("globalHighScore");
         String userHighScore = b.getString("userHighScore");
+        String user_name = b.getString("user_name");
 
         // Set values to views
         gameNameView.setText(gameName);
         gameDescriptionView.setText(description);
         gameGlobalHighScore.setText(globalHighScore);
-        gameuserHighScore.setText(userHighScore);
+        gameUserHighScore.setText(userHighScore);
         imageView.setImageResource(images[imageID]);
 
         // Start game activity
@@ -56,5 +62,23 @@ public class GameInfo extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x1 - x2;
+                if (Math.abs(deltaX) > MIN_DISTANCE && x2 < x1 )
+                    this.onBackPressed();
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }

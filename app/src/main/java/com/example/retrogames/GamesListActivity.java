@@ -4,6 +4,8 @@ package com.example.retrogames;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
@@ -12,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.room.Room;
 
 import com.example.retrogames.database.DAOs.UserDAO;
@@ -43,6 +46,10 @@ public class GamesListActivity extends AppCompatActivity
 
 //    public double[] userHighScores = { snakeHighScore, breakoutHighScore, tilterHighScore, pongHighScore };
 
+    // For detecting swipe gesture
+    private float x1,x2;
+    static final int MIN_DISTANCE = 150;
+
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
@@ -55,7 +62,16 @@ public class GamesListActivity extends AppCompatActivity
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
 
-        user =userDAO.getUserByName(username);
+        // Setting header
+        header = new TextView(this);
+        header.setTypeface(Typeface.DEFAULT_BOLD);
+        header.setText("Username: " + username + "   |  List of Games");
+
+        // Initializing list View
+        listView = (ListView) findViewById(R.id.games_list);
+        listView.addHeaderView(header);
+
+        user = userDAO.getUserByName(username);
         loadList();
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -65,10 +81,11 @@ public class GamesListActivity extends AppCompatActivity
                 GamesListActivity activity = GamesListActivity.this;
                 Intent intent = new Intent(activity, GameInfo.class);
 
-                user.setTilter_high_score(user.getTilter_high_score() + 100);
-
                 String game = activity.gameNames[i - 1];
                 String description  = activity.descriptions[i - 1];
+
+                user.setTilter_high_score(user.getTilter_high_score() + 100);
+                userDAO.updateUser(user);
 
                 Bundle b = new Bundle();
                 b.putInt("image", i - 1);
@@ -76,6 +93,7 @@ public class GamesListActivity extends AppCompatActivity
                 b.putString("description", description);
                 b.putString("globalHighScore", activity.globalHighScoreStrings[i - 1]);
                 b.putString("userHighScore", activity.userHighScoreStrings[i - 1]);
+                b.putString("user_name", activity.username);
 
                 intent.putExtras(b);
                 startActivity(intent);
@@ -83,13 +101,13 @@ public class GamesListActivity extends AppCompatActivity
         });
     }
     @Override
-    public void onBackPressed()
+    protected void onResume()
     {
-        super.onBackPressed();
+        super.onResume();
         loadList();
     }
 
-    private void populateScoreData(String username)
+    private void populateScoreData()
     {
         // Populating global score data
         snakeHighScore = userDAO.getGlobalSnakeHighScore();
@@ -103,10 +121,10 @@ public class GamesListActivity extends AppCompatActivity
         globalHighScoreStrings[3] = Double.toString(pongHighScore);
 
         // Populating user score data
-        snakeHighScore = userDAO.getUserSnakeHighScore(username);
-        breakoutHighScore = userDAO.getUserBreakoutHighScore(username);
-        tilterHighScore = userDAO.getUserTilterHighScore(username);
-        pongHighScore = userDAO.getUserPongHighScore(username);
+        snakeHighScore = user.getSnake_high_score();
+        breakoutHighScore = user.getBreakout_high_score();
+        tilterHighScore = user.getTilter_high_score();
+        pongHighScore = user.getPong_high_score();
 
         userHighScoreStrings[0] = Double.toString(snakeHighScore);
         userHighScoreStrings[1] = Double.toString(breakoutHighScore);
@@ -116,17 +134,27 @@ public class GamesListActivity extends AppCompatActivity
 
     private void loadList()
     {
-        // Setting header
-        header = new TextView(this);
-        header.setTypeface(Typeface.DEFAULT_BOLD);
-        header.setText("Username: " + username + "   |  List of Games");
-
-        populateScoreData(username);
-
-        listView = (ListView) findViewById(R.id.games_list);
-        listView.addHeaderView(header);
+        populateScoreData();
 
         CustomGameList gameList = new CustomGameList(this, gameNames, userHighScoreStrings, images);
         listView.setAdapter(gameList);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                float deltaX = x1 - x2;
+                if (Math.abs(deltaX) > MIN_DISTANCE && x2 < x1 )
+                    this.onBackPressed();
+                break;
+        }
+        return super.onTouchEvent(event);
     }
 }

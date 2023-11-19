@@ -13,6 +13,9 @@
         android:theme="@style/Theme.RetroGames"
         tools:targetApi="31">
         <activity
+            android:name=".gameActivities.SnakeGameOver"
+            android:exported="false" />
+        <activity
             android:name=".gameActivities.SnakeActivity"
             android:exported="false" />
         <activity
