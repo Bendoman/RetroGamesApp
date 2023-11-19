@@ -90,7 +90,22 @@ public class GamesListActivity extends AppCompatActivity
                 String game = activity.gameNames[i - 1];
                 String description  = activity.descriptions[i - 1];
 
-                user.setTilter_high_score(user.getTilter_high_score() + 100);
+                // Example to demo population of scores will be removed in full version
+                switch (game) {
+                    case "Snake":
+                        user.setSnake_high_score(user.getSnake_high_score() + 100);
+                        break;
+                    case "Breakout":
+                        user.setBreakout_high_score(user.getBreakout_high_score() + 100);
+                        break;
+                    case "Tilter":
+                        user.setTilter_high_score(user.getTilter_high_score() + 100);
+                        break;
+                    case "Pong":
+                        user.setPong_high_score(user.getPong_high_score() + 100);
+                        break;
+                }
+
                 userDAO.updateUser(user);
 
                 Bundle b = new Bundle();
