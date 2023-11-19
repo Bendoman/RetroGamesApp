@@ -25,28 +25,26 @@ import com.example.retrogames.database.entities.User;
 
 public class GamesListActivity extends AppCompatActivity
 {
+    private TextView header;
+    private ListView listView;
+
     private String username;
     public String getUsername() {
         return this.username;
     }
-    private ListView listView;
-    private TextView header;
 
     private User user;
-
-    private String gameNames[] = { "Snake", "Breakout", "Tilter", "Pong" };
+    public UserDAO userDAO;
     private String userHighScoreStrings[] = { " ", " ", " ", " " };
     private String globalHighScoreStrings[] = { " ", " ", " ", " " };
+    private String gameNames[] = { "Snake", "Breakout", "Tilter", "Pong" };
     private String descriptions[] = { "placeholder", "placeholder", "placeholder", "placeholder" };
     private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
 
-    public UserDAO userDAO;
     public double snakeHighScore;
     public double breakoutHighScore;
     public double tilterHighScore;
     public double pongHighScore;
-
-//    public double[] userHighScores = { snakeHighScore, breakoutHighScore, tilterHighScore, pongHighScore };
 
     // For detecting swipe gesture
     private float x1,x2;
@@ -66,11 +64,11 @@ public class GamesListActivity extends AppCompatActivity
 
         // Setting header
         header = new TextView(this);
-        header.setTypeface(Typeface.DEFAULT_BOLD);
         header.setTextSize(20);
-        header.setPadding(35, 35, 35, 35);
         header.setGravity(Gravity.CENTER);
         header.setText("Username: " + username);
+        header.setTypeface(Typeface.DEFAULT_BOLD);
+        header.setPadding(35, 35, 35, 35);
         header.setBackgroundColor(Color.parseColor("#5400C2C9"));
 
         // Initializing list View
@@ -112,9 +110,9 @@ public class GamesListActivity extends AppCompatActivity
                 b.putInt("image", i - 1);
                 b.putString("game", game);
                 b.putString("description", description);
+                b.putString("user_name", activity.username);
                 b.putString("globalHighScore", activity.globalHighScoreStrings[i - 1]);
                 b.putString("userHighScore", activity.userHighScoreStrings[i - 1]);
-                b.putString("user_name", activity.username);
 
                 intent.putExtras(b);
                 startActivity(intent);
@@ -179,3 +177,4 @@ public class GamesListActivity extends AppCompatActivity
         return super.onTouchEvent(event);
     }
 }
+

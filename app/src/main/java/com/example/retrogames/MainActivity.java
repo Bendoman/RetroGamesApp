@@ -59,6 +59,9 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view)
             {
                 String name = MainActivity.this.username;
+                if(name.equals(""))
+                    name = "Anonymous";
+
                 UserDAO DAO = MainActivity.this.userDAO;
                 List<User> users = DAO.loadAllUsers();
                 Log.d("DEBUG", users.toString());
@@ -74,9 +77,6 @@ public class MainActivity extends AppCompatActivity
                 {
                     User user = new User();
                     user.setUser_name(name);
-
-                    // TODO remove manual setting of high score here
-                    // Placeholder values for testing purposes
 
                     DAO.insertUser(user);
                 }

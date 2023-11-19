@@ -37,16 +37,15 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     private String direction = "right";
 
     private int score = 0;
-
+    private static final int snakeSpeed = 700;
     private static final int segmentSize = 75;
     private static final int defaultSnakeLength = 3;
-    private static final int snakeSpeed = 700;
 
     private int randomXPosition, randomYPosition;
     private int fruitPositionX, fruitPositionY;
 
+    // Timer for game loop
     private Timer timer;
-
     private Canvas canvas = null;
     private Paint segmentColor = null;
 
@@ -72,7 +71,6 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
         segmentColor.setColor(Color.GREEN);
         segmentColor.setStyle(Paint.Style.FILL);
         segmentColor.setAntiAlias(true);
-
 
         up_arrow.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -222,6 +220,7 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
                     canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
 
+                    // This will be changed to include full movement logic in a much cleaner way
                     canvas.drawRect(snakeSegments.get(0).getPositionX(), snakeSegments.get(0).getPositionY(), snakeSegments.get(0).getPositionX() + segmentSize, snakeSegments.get(0).getPositionY() + segmentSize, segmentColor);
 
                     surfaceHolder.unlockCanvasAndPost(canvas);
