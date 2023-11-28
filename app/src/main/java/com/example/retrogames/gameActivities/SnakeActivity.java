@@ -162,11 +162,6 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
         randomXPosition = new Random().nextInt((surfaceWidth - segmentSize) / segmentSize);
         randomYPosition = new Random().nextInt((surfaceHeight - segmentSize) / segmentSize);
 
-//        if(randomXPosition % 2 != 0)
-//            randomXPosition++;
-//        if(randomYPosition % 2 != 0)
-//            randomYPosition++;
-
         fruitPositionX = (segmentSize * randomXPosition);
         fruitPositionY = (segmentSize * randomYPosition);
     }
@@ -291,8 +286,13 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     }
 
     private boolean checkGameOver(int headPositionX, int headPositionY){
-        boolean gameOver = false;
-        return gameOver;
+        for(int i = 1; i < snakeSegments.size(); i++)
+        {
+            if (snakeSegments.get(0).getPositionX() == snakeSegments.get(i).getPositionX() &&
+                snakeSegments.get(0).getPositionY() == snakeSegments.get(i).getPositionY())
+                return true;
+        }
+        return false;
     }
 
     @Override
