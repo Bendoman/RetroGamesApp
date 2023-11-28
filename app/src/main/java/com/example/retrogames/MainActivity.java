@@ -58,9 +58,10 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
+                MainActivity.this.username = MainActivity.this.username;
+                if(MainActivity.this.username.equals(""))
+                    MainActivity.this.username = "Anonymous";
                 String name = MainActivity.this.username;
-                if(name.equals(""))
-                    name = "Anonymous";
 
                 UserDAO DAO = MainActivity.this.userDAO;
                 List<User> users = DAO.loadAllUsers();
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity
                 }
 
                 Intent intent = new Intent(MainActivity.this, GamesListActivity.class);
-                intent.putExtra("username", MainActivity.this.getUsername());
+                intent.putExtra("username", name);
                 startActivity(intent);
             }
         });

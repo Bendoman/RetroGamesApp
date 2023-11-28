@@ -7,7 +7,8 @@
     tools:context=".gameActivities.SnakeActivity"
     android:orientation="vertical"
     android:background="#e7dfc2"
-    android:gravity="center">
+    android:gravity="center"
+    >
 
     <RelativeLayout
         android:layout_above="@+id/bottomBar"
@@ -17,7 +18,7 @@
         <SurfaceView
             android:id="@+id/surfaceView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="1720dp">
         </SurfaceView>
 
         <TextView
@@ -37,16 +38,14 @@
         android:layout_height="wrap_content"
         android:orientation="vertical"
         android:gravity="center"
-        android:paddingTop="10dp"
-        android:paddingBottom="10dp"
-        android:background="@color/black"
+        android:background="@color/white"
         android:layout_alignParentBottom="true"
         android:id="@+id/bottomBar"
         >
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
             android:background="@android:color/holo_blue_light"
             android:src="@drawable/up_arrow"
             android:id="@+id/up_arrow"
@@ -57,16 +56,16 @@
             android:gravity="center"
             android:layout_height="wrap_content">
             <androidx.appcompat.widget.AppCompatImageButton
-                android:layout_width="80dp"
-                android:layout_height="50dp"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
                 android:background="@android:color/holo_blue_light"
                 android:src="@drawable/left_arrow"
                 android:id="@+id/left_arrow"
                 />
             <androidx.appcompat.widget.AppCompatImageButton
-                android:layout_marginStart="80dp"
-                android:layout_width="80dp"
-                android:layout_height="50dp"
+                android:layout_marginStart="45dp"
+                android:layout_width="45dp"
+                android:layout_height="30dp"
                 android:background="@android:color/holo_blue_light"
                 android:src="@drawable/right_arrow"
                 android:id="@+id/right_arrow"
@@ -74,9 +73,9 @@
         </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatImageButton
-            android:layout_marginTop="-50dp"
-            android:layout_width="80dp"
-            android:layout_height="50dp"
+            android:layout_marginTop="-30dp"
+            android:layout_width="45dp"
+            android:layout_height="30dp"
             android:background="@android:color/holo_blue_light"
             android:src="@drawable/down_arrow"
             android:id="@+id/down_arrow"

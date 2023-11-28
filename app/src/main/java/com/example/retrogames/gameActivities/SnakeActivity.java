@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
@@ -28,6 +29,10 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 {
     private final List<SnakeSegment> snakeSegments = new ArrayList<>();
 
+    // For detecting swipe gesture
+    private float x1, x2, y1, y2;
+    static final int MIN_DISTANCE = 75;
+
     // Surface holder used to draw
     private SurfaceHolder surfaceHolder;
     private SurfaceView surfaceView;
@@ -37,9 +42,9 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     private String direction = "right";
 
     private int score = 0;
-    private static final int snakeSpeed = 700;
-    private static final int segmentSize = 75;
-    private static final int defaultSnakeLength = 3;
+    private static int snakeSpeed = 600;
+    private static final int segmentSize = 40;
+    private static final int defaultSnakeLength = 2;
 
     private int randomXPosition, randomYPosition;
     private int fruitPositionX, fruitPositionY;
@@ -48,6 +53,10 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     private Timer timer;
     private Canvas canvas = null;
     private Paint segmentColor = null;
+
+    // SurfaceView width and height
+    int surfaceWidth;
+    int surfaceHeight;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -125,16 +134,20 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
     private void init()
     {
+        surfaceWidth = surfaceView.getWidth();
+        surfaceHeight = surfaceView.getHeight();
+        System.out.println(Integer.toString(surfaceWidth) + " : " + Integer.toString(surfaceHeight));
+
         snakeSegments.clear();
         scoreView.setText("0");
         score = 0;
         direction = "right";
 
-        int startPosX = 200;
+        int startPosX = 360;
 
         for(int i = 0; i < defaultSnakeLength; i++)
         {
-            SnakeSegment snakeSegment = new SnakeSegment(startPosX, 500);
+            SnakeSegment snakeSegment = new SnakeSegment(startPosX, 360);
             snakeSegments.add(snakeSegment);
 
             startPosX = startPosX - segmentSize;
@@ -146,23 +159,30 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     }
 
     private void addFruit() {
-        // SurfaceView width and height
-        int surfaceWidth = surfaceView.getWidth() - segmentSize;
-        int surfaceHeight = surfaceView.getWidth() - segmentSize;
+        randomXPosition = new Random().nextInt((surfaceWidth - segmentSize) / segmentSize);
+        randomYPosition = new Random().nextInt((surfaceHeight - segmentSize) / segmentSize);
 
-        randomXPosition = new Random().nextInt(surfaceWidth/segmentSize);
-        randomYPosition = new Random().nextInt(surfaceHeight/segmentSize);
+//        if(randomXPosition % 2 != 0)
+//            randomXPosition++;
+//        if(randomYPosition % 2 != 0)
+//            randomYPosition++;
 
-        if(randomXPosition % 2 != 0)
-            randomXPosition++;
-
-        if(randomYPosition % 2 != 0)
-            randomYPosition++;
-
-        fruitPositionX = (segmentSize * randomXPosition) + segmentSize;
-        fruitPositionY = (segmentSize * randomYPosition) + segmentSize;
+        fruitPositionX = (segmentSize * randomXPosition);
+        fruitPositionY = (segmentSize * randomYPosition);
     }
 
+    private void growSnake() {
+        score++;
+        if(snakeSpeed < 1000)
+            snakeSpeed += 40;
+
+        int size = snakeSegments.size();
+        SnakeSegment snakeSegment =
+                new SnakeSegment(
+                        snakeSegments.get(size - 1).getPositionX(),
+                        snakeSegments.get(size - 1).getPositionY());
+        snakeSegments.add(snakeSegment);
+    }
     private void moveSnake() {
         timer = new Timer();
         timer.scheduleAtFixedRate(new TimerTask() {
@@ -175,6 +195,29 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
                     growSnake();
 
                     addFruit();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            scoreView.setText(Integer.toString(score));
+                        }
+                    });
+                }
+
+                if( headPositionX > (surfaceWidth - segmentSize))
+                    snakeSegments.get(0).setPositionX(0);
+                else if( headPositionX < 0 )
+                    snakeSegments.get(0).setPositionX(surfaceWidth - segmentSize);
+
+                if( headPositionY > (surfaceHeight - segmentSize))
+                    snakeSegments.get(0).setPositionY(0);
+                else if(headPositionY < 0)
+                    snakeSegments.get(0).setPositionY(surfaceHeight - segmentSize);
+
+                for(int i = snakeSegments.size() - 1; i > 0; i--)
+                {
+                    snakeSegments.get(i).setPositionX(snakeSegments.get(i - 1).getPositionX());
+                    snakeSegments.get(i).setPositionY(snakeSegments.get(i - 1).getPositionY());
                 }
 
                 switch (direction) {
@@ -221,16 +264,30 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
                     canvas.drawColor(Color.WHITE, PorterDuff.Mode.CLEAR);
 
                     // This will be changed to include full movement logic in a much cleaner way
-                    canvas.drawRect(snakeSegments.get(0).getPositionX(), snakeSegments.get(0).getPositionY(), snakeSegments.get(0).getPositionX() + segmentSize, snakeSegments.get(0).getPositionY() + segmentSize, segmentColor);
+                    for(int i = 1; i < snakeSegments.size(); i++)
+                    {
+                        segmentColor.setColor(Color.GREEN);
+                        canvas.drawRect(snakeSegments.get(i).getPositionX(),
+                                        snakeSegments.get(i).getPositionY(),
+                                   snakeSegments.get(i).getPositionX() + segmentSize,
+                                 snakeSegments.get(i).getPositionY() + segmentSize,
+                                        segmentColor);
+                    }
+
+                    segmentColor.setColor(Color.RED);
+                    canvas.drawRect(fruitPositionX, fruitPositionY, fruitPositionX + segmentSize, fruitPositionY + segmentSize, segmentColor);
+
+                    segmentColor.setColor(Color.YELLOW);
+                    canvas.drawRect(snakeSegments.get(0).getPositionX(),
+                            snakeSegments.get(0).getPositionY(),
+                            snakeSegments.get(0).getPositionX() + segmentSize,
+                            snakeSegments.get(0).getPositionY() + segmentSize,
+                            segmentColor);
 
                     surfaceHolder.unlockCanvasAndPost(canvas);
                 }
             }
         }, 1000 - snakeSpeed, 1000 - snakeSpeed);
-    }
-
-    private void growSnake() {
-        score++;
     }
 
     private boolean checkGameOver(int headPositionX, int headPositionY){
@@ -246,5 +303,42 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
         super.onBackPressed();
     }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        switch(event.getAction())
+        {
+            case MotionEvent.ACTION_DOWN:
+                x1 = event.getX();
+                y1 = event.getY();
+                break;
+            case MotionEvent.ACTION_UP:
+                x2 = event.getX();
+                y2 = event.getY();
+
+                float deltaX = x1 - x2;
+                float deltaY = y1 - y2;
+
+                if (Math.abs(deltaX) > MIN_DISTANCE && direction != "left" && direction != "right")
+                {
+                    if(x2 < x1)
+                        direction = "left";
+                    else
+                        direction = "right";
+                }
+                else if(Math.abs(deltaY) > MIN_DISTANCE && direction != "up" && direction != "down")
+                {
+                    if(y2 < y1)
+                        direction = "up";
+                    else
+                        direction = "down";
+                }
+
+                break;
+        }
+        return super.onTouchEvent(event);
+    }
 }
+
 
