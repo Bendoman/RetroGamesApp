@@ -118,15 +118,12 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     public void surfaceCreated(@NonNull SurfaceHolder surfaceHolder)
     {
         this.surfaceHolder = surfaceHolder;
-
         init();
     }
-
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {
 
     }
-
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) {
 
@@ -136,7 +133,6 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
     {
         surfaceWidth = surfaceView.getWidth();
         surfaceHeight = surfaceView.getHeight();
-        System.out.println(Integer.toString(surfaceWidth) + " : " + Integer.toString(surfaceHeight));
 
         snakeSegments.clear();
         scoreView.setText("0");
@@ -154,7 +150,6 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
         }
 
         addFruit();
-
         moveSnake();
     }
 
@@ -303,6 +298,7 @@ public class SnakeActivity extends AppCompatActivity implements SurfaceHolder.Ca
 
         super.onBackPressed();
     }
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event)

@@ -10,6 +10,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.retrogames.gameActivities.BreakoutGame;
+import com.example.retrogames.gameActivities.BreakoutMainActivity;
 import com.example.retrogames.gameActivities.SnakeActivity;
 
 public class GameInfo extends AppCompatActivity
@@ -58,8 +60,17 @@ public class GameInfo extends AppCompatActivity
             @Override
             public void onClick(View view)
             {
-                Intent intent = new Intent(GameInfo.this, SnakeActivity.class);
-                startActivity(intent);
+                Intent intent;
+                switch(gameName) {
+                    case "Snake":
+                        intent = new Intent(GameInfo.this, SnakeActivity.class);
+                        startActivity(intent);
+                        break;
+                    case "Breakout":
+                        intent = new Intent(GameInfo.this, BreakoutMainActivity.class);
+                        startActivity(intent);
+                        break;
+                }
             }
         });
     }
