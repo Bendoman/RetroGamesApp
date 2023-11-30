@@ -16,12 +16,6 @@
             android:name=".gameActivities.BreakoutMainActivity"
             android:exported="false" />
         <activity
-            android:name=".gameActivities.BreakoutActivity"
-            android:exported="false" />
-        <activity
-            android:name=".gameActivities.SnakeGameOver"
-            android:exported="false" />
-        <activity
             android:name=".gameActivities.SnakeActivity"
             android:exported="false" />
         <activity
