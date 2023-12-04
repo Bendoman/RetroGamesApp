@@ -1,6 +1,4 @@
-package com.example.retrogames.gameActivities;
-
-import androidx.appcompat.app.AppCompatActivity;
+package com.example.retrogames.breakoutGame;
 
 import android.app.Activity;
 import android.os.Bundle;

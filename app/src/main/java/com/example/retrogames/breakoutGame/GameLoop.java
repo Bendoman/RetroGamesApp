@@ -1,10 +1,7 @@
-package com.example.retrogames.gameActivities;
+package com.example.retrogames.breakoutGame;
 
-import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.graphics.Canvas;
-
-import java.util.zip.Adler32;
 
 
 public class GameLoop extends Thread {
@@ -12,6 +9,7 @@ public class GameLoop extends Thread {
     private SurfaceHolder surfaceHolder;
 
     private boolean isRunning = false;
+    private boolean objectsInitialised = false;
 
     private double averageFPS;
     private double averageUPS;
@@ -36,6 +34,10 @@ public class GameLoop extends Thread {
         start();
     }
 
+    public void endLoop() {
+        isRunning = false;
+    }
+
     @Override
     public void run() {
         super.run();
@@ -52,11 +54,16 @@ public class GameLoop extends Thread {
         startTime = System.currentTimeMillis();
         while(isRunning)
         {
-
             // Update and render game
             try {
                 canvas = surfaceHolder.lockCanvas();
                 synchronized (surfaceHolder) {
+                    if(!objectsInitialised)
+                    {
+                        game.initObjects(canvas);
+                        objectsInitialised = true;
+                    }
+
                     game.update();
                     updateCount++;
 

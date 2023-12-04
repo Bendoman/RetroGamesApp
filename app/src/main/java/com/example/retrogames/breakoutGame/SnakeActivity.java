@@ -1,4 +1,4 @@
-package com.example.retrogames.gameActivities;
+package com.example.retrogames.breakoutGame;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;

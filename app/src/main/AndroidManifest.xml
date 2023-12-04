@@ -13,10 +13,10 @@
         android:theme="@style/Theme.RetroGames"
         tools:targetApi="31">
         <activity
-            android:name=".gameActivities.BreakoutMainActivity"
+            android:name=".breakoutGame.BreakoutMainActivity"
             android:exported="false" />
         <activity
-            android:name=".gameActivities.SnakeActivity"
+            android:name=".breakoutGame.SnakeActivity"
             android:exported="false" />
         <activity
             android:name=".GameInfo"

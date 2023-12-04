@@ -1,4 +1,4 @@
-package com.example.retrogames.gameActivities;
+package com.example.retrogames.breakoutGame;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -8,21 +8,23 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 
-public class Player {
-    private static final double SPEED_PIXELS_PER_SECOND = 400.0;
+public class BreakoutPaddle extends GameObject {
+    private static final double SPEED_PIXELS_PER_SECOND = 800.0;
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
+
     private double positionX;
     private double positionY;
+
     private double length;
     private double height;
     private Paint paint;
-
     private double canvasWidth = 0;
+
     private double canvasHeight = 0;
+
     private double velocityX;
     private double velocityY;
-
-    public Player(Context context, double positionX, double positionY, double length, double height) {
+    public BreakoutPaddle(Context context, double positionX, double positionY, double length, double height) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.length = length;
@@ -31,10 +33,6 @@ public class Player {
         paint = new Paint();
         int color = ContextCompat.getColor(context, R.color.player);
         paint.setColor(color);
-    }
-
-    public double getLength() {
-        return length;
     }
 
     public void draw(Canvas canvas) {
@@ -46,18 +44,29 @@ public class Player {
     }
 
     public void update(Joystick joystick) {
+        // Times the joystick actuator X value by the maximum speed
         velocityX = joystick.getActuatorX()*MAX_SPEED;
-        velocityY = joystick.getActuatorY()*MAX_SPEED;
-        positionX += velocityX;
-        positionY += velocityY;
 
+        // So that the paddle stops smoothly at the edges of the screen
+        if( (positionX > 0 && positionX < (canvasWidth - length)) || (positionX == 0 && velocityX > 0)
+        || (positionX == (canvasWidth - length) && velocityX < 0))
+            positionX += velocityX;
+        else if( positionX <= 0 )
+            positionX = 0;
+        else
+            positionX = canvasWidth - length;
     }
 
     public void setPosition(double positionX) {
             this.positionX  = positionX;
     }
-    public void setPosition(double positionX, double positionY) {
-        this.positionX = positionX;
-        this.positionY = positionY;
+    public double getPositionX() {
+        return positionX;
     }
+    public double getPositionY() {
+        return positionY;
+    }
+    public double getHeight() { return height; }
+    public double getLength() {return length; }
+    public double getVelocityX() { return velocityX; }
 }

@@ -1,4 +1,4 @@
-package com.example.retrogames.gameActivities;
+package com.example.retrogames.breakoutGame;
 
 import android.graphics.Canvas;
 import android.graphics.Color;

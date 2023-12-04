@@ -12,9 +12,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.example.retrogames.gameActivities.BreakoutGame;
-import com.example.retrogames.gameActivities.BreakoutMainActivity;
-import com.example.retrogames.gameActivities.SnakeActivity;
+import com.example.retrogames.breakoutGame.BreakoutMainActivity;
+import com.example.retrogames.breakoutGame.SnakeActivity;
 
 public class GameInfo extends AppCompatActivity
 {
