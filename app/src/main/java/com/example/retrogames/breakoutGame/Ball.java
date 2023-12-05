@@ -2,7 +2,6 @@ package com.example.retrogames.breakoutGame;
 
 import android.content.Context;
 import android.graphics.Canvas;
-import android.graphics.Color;
 import android.graphics.Paint;
 
 import androidx.core.content.ContextCompat;
@@ -13,8 +12,18 @@ import java.util.List;
 
 public class Ball {
 
-    private static final double SPEED_PIXELS_PER_SECOND = 400.0;
-    private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
+    // Tying the maximum speed to number of pixel per second by relating it to the UPS
+    private double pixelsPerSecond = 400.0;
+    private double maxSpeed = pixelsPerSecond / GameLoop.MAX_UPS;
+
+    // For updating the maximum speed as the level increases
+    public void increaseSpeed() {
+        if(pixelsPerSecond > 1000)
+            return;
+
+        pixelsPerSecond += 250;
+        maxSpeed = pixelsPerSecond / GameLoop.MAX_UPS;
+    }
 
     private BreakoutGame game;
     private List<GameObject> gameObjects;
@@ -22,8 +31,8 @@ public class Ball {
     private double canvasHeight = 0;
     private double positionX;
     private double positionY;
-    private double velocityX = MAX_SPEED;
-    private double velocityY = MAX_SPEED;
+    private double velocityX = maxSpeed;
+    private double velocityY = maxSpeed;
     private int radius;
 
     private Paint paint;
@@ -50,11 +59,13 @@ public class Ball {
     }
 
     public void update() {
+        // Checks if the ball is colliding with the edges of the screen and reverses its velocity if so
         if(positionX - radius <= 0 || positionX + radius >= canvasWidth)
             velocityX = -velocityX;
         if(positionY - radius <= 0 || positionY + radius >= canvasHeight)
             velocityY = -velocityY;
 
+        // This for loop is for detecting collisions with the game objects ( Bricks and paddle )
         for(int i = 0; i < gameObjects.size(); i++)
         {
             GameObject rect = gameObjects.get(i);
@@ -78,22 +89,24 @@ public class Ball {
         positionY += velocityY;
     }
 
+    /*
+        Standard circle - rectangle collision detection.
+        Returns true if this object is in collision with the passed rectangle GameObject
+     */
     boolean intersects(GameObject rect)
     {
-        // temporarect.getPositionY() variables to set edges for testing
         double testX = positionX;
         double testY = positionY;
 
-        // which edge is closest?
         if (positionX < rect.getPositionX())
-            testX = rect.getPositionX();      // test left edge
+            testX = rect.getPositionX();
         else if (positionX > rect.getPositionX()+rect.getLength())
-            testX = rect.getPositionX()+rect.getLength();   // right edge
+            testX = rect.getPositionX()+rect.getLength();
 
         if (positionY < rect.getPositionY())
-            testY = rect.getPositionY();      // top edge
+            testY = rect.getPositionY();
         else if (positionY > rect.getPositionY()+rect.getHeight())
-            testY = rect.getPositionY()+rect.getHeight();   // bottom edge
+            testY = rect.getPositionY()+rect.getHeight();
 
         // get distance from closest edges
         double distX = positionX-testX;

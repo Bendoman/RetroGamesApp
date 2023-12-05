@@ -64,7 +64,7 @@ public class GameLoop extends Thread {
                         objectsInitialised = true;
                     }
 
-                    game.update();
+                    game.update(canvas);
                     updateCount++;
 
                     game.draw(canvas);
@@ -97,7 +97,7 @@ public class GameLoop extends Thread {
             // Skip frames to keep up with target UPS
             while(sleepTime < 0 && updateCount < MAX_UPS - 1)
             {
-                game.update();
+                game.update(canvas);
                 updateCount++;
                 elapsedTime = System.currentTimeMillis() - startTime;
                 sleepTime = (long) (updateCount*UPS_PERIOD - elapsedTime);
