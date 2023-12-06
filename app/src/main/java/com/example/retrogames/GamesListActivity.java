@@ -95,24 +95,6 @@ public class GamesListActivity extends AppCompatActivity
                 String game = activity.gameNames[i - 1];
                 String description  = activity.descriptions[i - 1];
 
-                // Example to demo population of scores will be removed in full version
-                switch (game) {
-                    case "Snake":
-                        user.setSnake_high_score(user.getSnake_high_score() + 100);
-                        break;
-                    case "Breakout":
-                        user.setBreakout_high_score(user.getBreakout_high_score() + 100);
-                        break;
-                    case "Tilter":
-                        user.setTilter_high_score(user.getTilter_high_score() + 100);
-                        break;
-                    case "Pong":
-                        user.setPong_high_score(user.getPong_high_score() + 100);
-                        break;
-                }
-
-                userDAO.updateUser(user);
-
                 Bundle b = new Bundle();
                 b.putInt("image", i - 1);
                 b.putString("game", game);
@@ -136,26 +118,17 @@ public class GamesListActivity extends AppCompatActivity
     private void populateScoreData()
     {
         // Populating global score data
-        snakeHighScore = userDAO.getGlobalSnakeHighScore();
-        breakoutHighScore = userDAO.getGlobalBreakoutHighScore();
-        tilterHighScore = userDAO.getGlobalTilterHighScore();
-        pongHighScore = userDAO.getGlobalPongHighScore();
-
-        globalHighScoreStrings[0] = Double.toString(snakeHighScore);
-        globalHighScoreStrings[1] = Double.toString(breakoutHighScore);
-        globalHighScoreStrings[2] = Double.toString(tilterHighScore);
-        globalHighScoreStrings[3] = Double.toString(pongHighScore);
+        globalHighScoreStrings[0] = Double.toString(userDAO.getGlobalSnakeHighScore());
+        globalHighScoreStrings[1] = Double.toString(userDAO.getGlobalBreakoutHighScore());
+        globalHighScoreStrings[2] = Double.toString(userDAO.getGlobalTilterHighScore());
+        globalHighScoreStrings[3] = Double.toString(userDAO.getGlobalPongHighScore());
 
         // Populating user score data
-        snakeHighScore = user.getSnake_high_score();
-        breakoutHighScore = user.getBreakout_high_score();
-        tilterHighScore = user.getTilter_high_score();
-        pongHighScore = user.getPong_high_score();
-
-        userHighScoreStrings[0] = Double.toString(snakeHighScore);
-        userHighScoreStrings[1] = Double.toString(breakoutHighScore);
-        userHighScoreStrings[2] = Double.toString(tilterHighScore);
-        userHighScoreStrings[3] = Double.toString(pongHighScore);
+        user = userDAO.getUserByName(username);
+        userHighScoreStrings[0] = Double.toString(user.getSnake_high_score());
+        userHighScoreStrings[1] = Double.toString(user.getBreakout_high_score());
+        userHighScoreStrings[2] = Double.toString(user.getTilter_high_score());
+        userHighScoreStrings[3] = Double.toString(user.getPong_high_score());
     }
 
     private void loadList()

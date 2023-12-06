@@ -29,7 +29,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback 
     private int score;
 
     List<GameObject> gameObjects;
-    private int level;
+    private int level = 1;
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
@@ -169,10 +169,15 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback 
     }
 
     public void endGame() {
+        // Stop updating the game
         gameLoop.endLoop();
     }
 
     public void addScore(int i) {
         this.score += i;
+    }
+
+    public double getScore() {
+        return score;
     }
 }

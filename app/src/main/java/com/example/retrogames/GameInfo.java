@@ -1,6 +1,12 @@
 package com.example.retrogames;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,12 +20,22 @@ import android.widget.TextView;
 
 import com.example.retrogames.breakoutGame.BreakoutMainActivity;
 import com.example.retrogames.breakoutGame.SnakeActivity;
+import com.example.retrogames.database.DAOs.UserDAO;
+import com.example.retrogames.database.UserDatabase;
+import com.example.retrogames.database.entities.User;
 
 public class GameInfo extends AppCompatActivity
 {
     // For detecting swipe gesture
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
+
+    TextView gameGlobalHighScore;
+    TextView gameUserHighScore;
+
+    String user_name;
+    private User user;
+    public UserDAO userDAO;
 
     // TODO remove this from here and have it passed dynamically
     private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
@@ -35,12 +51,18 @@ public class GameInfo extends AppCompatActivity
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
+        // Database setup
+        userDAO = Room.databaseBuilder(this, UserDatabase.class, "user-database")
+                .allowMainThreadQueries().build().getUserDAO();
+
+
         // Get views from layout
         TextView gameNameView = (TextView) findViewById(R.id.gameNameField);
         TextView gameDescriptionView = (TextView) findViewById(R.id.gameDescriptionField);
-        TextView gameGlobalHighScore = (TextView) findViewById(R.id.globalHighScoreField);
-        TextView gameUserHighScore = (TextView) findViewById(R.id.userHighScoreField);
         ImageView imageView = (ImageView) findViewById(R.id.gameImageView);
+
+        gameGlobalHighScore = (TextView) findViewById(R.id.globalHighScoreField);
+        gameUserHighScore = (TextView) findViewById(R.id.userHighScoreField);
 
         // Get values from bundle
         Bundle b = getIntent().getExtras();
@@ -49,14 +71,15 @@ public class GameInfo extends AppCompatActivity
         String description = b.getString("description");
         String globalHighScore = b.getString("globalHighScore");
         String userHighScore = b.getString("userHighScore");
-        String user_name = b.getString("user_name");
+        user_name = b.getString("user_name");
 
         // Set values to views
         gameNameView.setText(gameName);
         gameDescriptionView.setText(description);
-        gameGlobalHighScore.setText(globalHighScore);
-        gameUserHighScore.setText(userHighScore);
         imageView.setImageResource(images[imageID]);
+
+        // Set scores
+        loadScores();
 
         // Start game activity
         Button playGame = (Button) findViewById(R.id.playGame);
@@ -74,6 +97,7 @@ public class GameInfo extends AppCompatActivity
                         break;
                     case "Breakout":
                         intent = new Intent(GameInfo.this, BreakoutMainActivity.class);
+                        intent.putExtra("username", user_name);
                         startActivity(intent);
                         break;
                 }
@@ -97,5 +121,20 @@ public class GameInfo extends AppCompatActivity
                 break;
         }
         return super.onTouchEvent(event);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadScores();
+    }
+
+    private void loadScores() {
+        user = userDAO.getUserByName(user_name);
+        String globalHighScore = Double.toString(userDAO.getGlobalBreakoutHighScore());
+        String userHighScore = Double.toString(user.getBreakout_high_score());
+
+        gameGlobalHighScore.setText(globalHighScore);
+        gameUserHighScore.setText(userHighScore);
     }
 }
