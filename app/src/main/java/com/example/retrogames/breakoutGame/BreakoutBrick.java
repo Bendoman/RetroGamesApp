@@ -7,8 +7,9 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
+import com.example.retrogames.gameUtilities.GameObject;
 
-public class GameBrick extends GameObject
+public class BreakoutBrick implements GameObject
 {
     private double positionX;
     private double positionY;
@@ -17,7 +18,7 @@ public class GameBrick extends GameObject
     private double height;
     private Paint paint;
 
-    public GameBrick(Context context, double positionX, double positionY, double length, double height) {
+    public BreakoutBrick(Context context, double positionX, double positionY, double length, double height) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.length = length;
@@ -29,17 +30,17 @@ public class GameBrick extends GameObject
     }
 
     @Override
-    void draw(Canvas canvas) {
+    public void draw(Canvas canvas) {
         canvas.drawRect((float) positionX, (float) positionY, (float) (positionX + length), (float) (positionY + height), paint);
     }
     @Override
-    double getPositionX() { return positionX; }
+    public double getPositionX() { return positionX; }
     @Override
-    double getPositionY() { return positionY; }
+    public double getPositionY() { return positionY; }
     @Override
-    double getHeight() { return height; }
+    public double getHeight() { return height; }
     @Override
-    double getLength() { return length; }
+    public double getLength() { return length; }
 
     public double getVelocityX() { return 0; }
 

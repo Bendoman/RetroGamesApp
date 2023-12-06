@@ -1,4 +1,4 @@
-package com.example.retrogames.breakoutGame;
+package com.example.retrogames.gameUtilities;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,8 +7,11 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
+import com.example.retrogames.gameUtilities.GameLoop;
+import com.example.retrogames.gameUtilities.GameObject;
+import com.example.retrogames.gameUtilities.Joystick;
 
-public class BreakoutPaddle extends GameObject {
+public class MovablePaddle implements GameObject {
     private static final double SPEED_PIXELS_PER_SECOND = 800.0;
     private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
 
@@ -24,7 +27,7 @@ public class BreakoutPaddle extends GameObject {
 
     private double velocityX;
     private double velocityY;
-    public BreakoutPaddle(Context context, double positionX, double positionY, double length, double height) {
+    public MovablePaddle(Context context, double positionX, double positionY, double length, double height) {
         this.positionX = positionX;
         this.positionY = positionY;
         this.length = length;

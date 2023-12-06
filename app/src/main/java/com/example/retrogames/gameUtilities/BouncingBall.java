@@ -1,4 +1,4 @@
-package com.example.retrogames.breakoutGame;
+package com.example.retrogames.gameUtilities;
 
 import android.content.Context;
 import android.graphics.Canvas;
@@ -7,10 +7,13 @@ import android.graphics.Paint;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
+import com.example.retrogames.breakoutGame.BreakoutGame;
+import com.example.retrogames.gameUtilities.GameLoop;
+import com.example.retrogames.gameUtilities.GameObject;
 
 import java.util.List;
 
-public class Ball {
+public class BouncingBall {
 
     // Tying the maximum speed to number of pixel per second by relating it to the UPS
     private double pixelsPerSecond = 400.0;
@@ -25,20 +28,20 @@ public class Ball {
         maxSpeed = pixelsPerSecond / GameLoop.MAX_UPS;
     }
 
-    private BreakoutGame game;
-    private List<GameObject> gameObjects;
-    private double canvasWidth = 0;
-    private double canvasHeight = 0;
-    private double positionX;
-    private double positionY;
-    private double velocityX = maxSpeed;
-    private double velocityY = maxSpeed;
-    private int radius;
+    protected GameClass game;
+    protected List<GameObject> gameObjects;
+    protected double canvasWidth = 0;
+    protected double canvasHeight = 0;
+    protected double positionX;
+    protected double positionY;
+    protected double velocityX = maxSpeed;
+    protected double velocityY = maxSpeed;
+    protected int radius;
 
-    private Paint paint;
+    protected Paint paint;
 
 
-    public Ball(Context context, BreakoutGame game,  List<GameObject> gameObjects, double positionX, double positionY, int radius) {
+    public BouncingBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius) {
         this.game = game;
         this.gameObjects = gameObjects;
         this.positionX = positionX;
@@ -69,19 +72,18 @@ public class Ball {
         for(int i = 0; i < gameObjects.size(); i++)
         {
             GameObject rect = gameObjects.get(i);
-            if(i == 0 && (positionY + radius) > (rect.getPositionY() + rect.getHeight() + 100))
-                game.endGame();
 
             if(intersects(rect))
             {
+
+                if (rect.getVelocityX() > 0) // object came from the left
+                    positionX = rect.getPositionX() - radius;
+                else if (rect.getVelocityX() < 0) // object came from the right
+                    positionX = rect.getPositionX() + rect.getLength() + radius;
+
                 if (positionX < rect.getPositionX() || positionX > rect.getPositionX()+rect.getLength())
                     velocityX = -velocityX;
                 velocityY = -velocityY;
-
-                if(i > 0) {
-                    game.removeObject(rect);
-                    game.addScore(1);
-                }
             }
         }
 
@@ -93,7 +95,7 @@ public class Ball {
         Standard circle - rectangle collision detection.
         Returns true if this object is in collision with the passed rectangle GameObject
      */
-    boolean intersects(GameObject rect)
+    protected boolean intersects(GameObject rect)
     {
         double testX = positionX;
         double testY = positionY;

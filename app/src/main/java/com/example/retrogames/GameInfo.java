@@ -1,10 +1,5 @@
 package com.example.retrogames;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
-import androidx.activity.result.ActivityResultLauncher;
-import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
@@ -23,6 +18,7 @@ import com.example.retrogames.breakoutGame.SnakeActivity;
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
+import com.example.retrogames.pongGame.PongMainActivity;
 
 public class GameInfo extends AppCompatActivity
 {
@@ -30,8 +26,8 @@ public class GameInfo extends AppCompatActivity
     private float x1,x2;
     static final int MIN_DISTANCE = 150;
 
-    TextView gameGlobalHighScore;
-    TextView gameUserHighScore;
+    TextView globalHighScoreTextView;
+    TextView userHighScoreTextView;
 
     String user_name;
     private User user;
@@ -39,6 +35,9 @@ public class GameInfo extends AppCompatActivity
 
     // TODO remove this from here and have it passed dynamically
     private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
+    private String gameName;
+    private String globalHighScore;
+    private String userHighScore;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -61,13 +60,13 @@ public class GameInfo extends AppCompatActivity
         TextView gameDescriptionView = (TextView) findViewById(R.id.gameDescriptionField);
         ImageView imageView = (ImageView) findViewById(R.id.gameImageView);
 
-        gameGlobalHighScore = (TextView) findViewById(R.id.globalHighScoreField);
-        gameUserHighScore = (TextView) findViewById(R.id.userHighScoreField);
+        globalHighScoreTextView = (TextView) findViewById(R.id.globalHighScoreField);
+        userHighScoreTextView = (TextView) findViewById(R.id.userHighScoreField);
 
         // Get values from bundle
         Bundle b = getIntent().getExtras();
         int imageID = b.getInt("image");
-        String gameName = b.getString("game");
+        gameName = b.getString("game");
         String description = b.getString("description");
         String globalHighScore = b.getString("globalHighScore");
         String userHighScore = b.getString("userHighScore");
@@ -97,6 +96,11 @@ public class GameInfo extends AppCompatActivity
                         break;
                     case "Breakout":
                         intent = new Intent(GameInfo.this, BreakoutMainActivity.class);
+                        intent.putExtra("username", user_name);
+                        startActivity(intent);
+                        break;
+                    case "Pong":
+                        intent = new Intent(GameInfo.this, PongMainActivity.class);
                         intent.putExtra("username", user_name);
                         startActivity(intent);
                         break;
@@ -131,10 +135,26 @@ public class GameInfo extends AppCompatActivity
 
     private void loadScores() {
         user = userDAO.getUserByName(user_name);
-        String globalHighScore = Double.toString(userDAO.getGlobalBreakoutHighScore());
-        String userHighScore = Double.toString(user.getBreakout_high_score());
-
-        gameGlobalHighScore.setText(globalHighScore);
-        gameUserHighScore.setText(userHighScore);
+        switch(gameName) {
+            case "Snake":
+                globalHighScore = Double.toString(userDAO.getGlobalSnakeHighScore());
+                userHighScore = Double.toString(user.getSnake_high_score());
+                break;
+            case "Breakout":
+                globalHighScore = Double.toString(userDAO.getGlobalBreakoutHighScore());
+                userHighScore = Double.toString(user.getBreakout_high_score());
+                break;
+            case "Pong":
+                globalHighScore = Double.toString(userDAO.getGlobalPongHighScore());
+                userHighScore = Double.toString(user.getPong_high_score());
+                break;
+            case "Tilter":
+                globalHighScore = Double.toString(userDAO.getGlobalTilterHighScore());
+                userHighScore = Double.toString(user.getTilter_high_score());
+                break;
+        }
+        userHighScoreTextView.setText(userHighScore);
+        globalHighScoreTextView.setText(globalHighScore);
     }
 }
+
