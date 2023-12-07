@@ -3,6 +3,7 @@ package com.example.retrogames.gameUtilities;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
@@ -35,8 +36,8 @@ public class BouncingBall {
     protected double canvasHeight = 0;
     protected double positionX;
     protected double positionY;
-    protected double velocityX = maxSpeed;
-    protected double velocityY = maxSpeed;
+    protected double velocityX;
+    protected double velocityY;
     protected int radius;
 
     protected Paint paint;
@@ -44,7 +45,9 @@ public class BouncingBall {
 
     public BouncingBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius, double maxUPS) {
         this.maxUPS = maxUPS;
-        maxSpeed = pixelsPerSecond / this.maxUPS;
+        maxSpeed = pixelsPerSecond / maxUPS;
+        velocityX = maxSpeed;
+        velocityY = maxSpeed;
 
         this.game = game;
         this.gameObjects = gameObjects;
