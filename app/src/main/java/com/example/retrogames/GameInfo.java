@@ -19,6 +19,7 @@ import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
 import com.example.retrogames.pongGame.PongMainActivity;
+import com.example.retrogames.snakeGame.SnakeMainActivity;
 
 public class GameInfo extends AppCompatActivity
 {
@@ -91,7 +92,8 @@ public class GameInfo extends AppCompatActivity
                 Intent intent;
                 switch(gameName) {
                     case "Snake":
-                        intent = new Intent(GameInfo.this, SnakeActivity.class);
+                        intent = new Intent(GameInfo.this, SnakeMainActivity.class);
+                        intent.putExtra("username", user_name);
                         startActivity(intent);
                         break;
                     case "Breakout":
