@@ -10,8 +10,8 @@ import java.util.List;
 
 public class BreakoutBall extends BouncingBall {
 
-    public BreakoutBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius) {
-        super(context, game, gameObjects, positionX, positionY, radius);
+    public BreakoutBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius, double maxUPS) {
+        super(context, game, gameObjects, positionX, positionY, radius, maxUPS);
     }
 
     @Override

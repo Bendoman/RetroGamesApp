@@ -43,7 +43,7 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
-        gameLoop = new GameLoop(this, surfaceHolder);
+        gameLoop = new GameLoop(this, surfaceHolder, 60);
         score = 0;
 
         setFocusable(true);
@@ -54,15 +54,15 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         // Initialize game objects
         gameObjects = new ArrayList<GameObject>();
         joystick1 = new Joystick(canvas.getWidth()/2, canvas.getHeight() - 150, 70, 40);
-        player1 = new MovablePaddle(getContext(), 500, canvas.getHeight() - 300, 250, 50);
+        player1 = new MovablePaddle(getContext(), 500, canvas.getHeight() - 300, 250, 50, gameLoop.maxUPS);
 
         joystick2 = new Joystick(canvas.getWidth()/2, 150, 70, 40);
-        player2 = new MovablePaddle(getContext(), 500, 250, 250, 50);
+        player2 = new MovablePaddle(getContext(), 500, 250, 250, 50, gameLoop.maxUPS);
 
         gameObjects.add(player1);
         gameObjects.add(player2);
 
-        ball = new PongBall(getContext(), this, gameObjects, 500, 500, 25);
+        ball = new PongBall(getContext(), this, gameObjects, 500, 500, 25, gameLoop.maxUPS);
     }
 
     @Override
@@ -115,8 +115,6 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
 
     @Override
     public void update(Canvas canvas) {
-        super.draw(canvas);
-
         joystick1.update();
         joystick2.update();
         player1.update(joystick1);

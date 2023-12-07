@@ -12,8 +12,9 @@ import com.example.retrogames.gameUtilities.GameObject;
 import com.example.retrogames.gameUtilities.Joystick;
 
 public class MovablePaddle implements GameObject {
-    private static final double SPEED_PIXELS_PER_SECOND = 800.0;
-    private static final double MAX_SPEED = SPEED_PIXELS_PER_SECOND / GameLoop.MAX_UPS;
+
+    private final double SPEED_PIXELS_PER_SECOND = 800.0;
+    private double MAX_SPEED;
 
     private double positionX;
     private double positionY;
@@ -27,7 +28,10 @@ public class MovablePaddle implements GameObject {
 
     private double velocityX;
     private double velocityY;
-    public MovablePaddle(Context context, double positionX, double positionY, double length, double height) {
+    public MovablePaddle(Context context, double positionX, double positionY, double length, double height, double maxUPS) {
+
+        MAX_SPEED = SPEED_PIXELS_PER_SECOND / maxUPS;
+
         this.positionX = positionX;
         this.positionY = positionY;
         this.length = length;

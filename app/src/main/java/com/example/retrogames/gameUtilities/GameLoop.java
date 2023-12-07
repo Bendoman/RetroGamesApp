@@ -3,8 +3,6 @@ package com.example.retrogames.gameUtilities;
 import android.view.SurfaceHolder;
 import android.graphics.Canvas;
 
-import com.example.retrogames.breakoutGame.BreakoutGame;
-
 
 public class GameLoop extends Thread {
     private GameClass game;
@@ -15,10 +13,14 @@ public class GameLoop extends Thread {
 
     private double averageFPS;
     private double averageUPS;
-    public static final double MAX_UPS = 60.0;
-    private static final double UPS_PERIOD = 1E+3/MAX_UPS;
 
-    public GameLoop(GameClass game, SurfaceHolder surfaceHolder) {
+    public final double maxUPS;
+    public final double upsPeriod;
+
+    public GameLoop(GameClass game, SurfaceHolder surfaceHolder, double maxUPS) {
+
+        this.maxUPS = maxUPS;
+        this.upsPeriod = 1E+3/maxUPS;
         this.game = game;
         this.surfaceHolder = surfaceHolder;
     }
@@ -87,7 +89,7 @@ public class GameLoop extends Thread {
 
             // Pause game loop to not exceed target UPS
             elapsedTime = System.currentTimeMillis() - startTime;
-            sleepTime = (long) (updateCount*UPS_PERIOD - elapsedTime);
+            sleepTime = (long) (updateCount* upsPeriod - elapsedTime);
             if(sleepTime > 0) {
                 try {
                     sleep(sleepTime);
@@ -97,12 +99,12 @@ public class GameLoop extends Thread {
             }
 
             // Skip frames to keep up with target UPS
-            while(sleepTime < 0 && updateCount < MAX_UPS - 1)
+            while(sleepTime < 0 && updateCount < maxUPS - 1)
             {
                 game.update(canvas);
                 updateCount++;
                 elapsedTime = System.currentTimeMillis() - startTime;
-                sleepTime = (long) (updateCount*UPS_PERIOD - elapsedTime);
+                sleepTime = (long) (updateCount* upsPeriod - elapsedTime);
             }
 
             // Calculate average UPS and FPS

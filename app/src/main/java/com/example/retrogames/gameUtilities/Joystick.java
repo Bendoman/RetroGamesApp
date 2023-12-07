@@ -74,9 +74,7 @@ public class Joystick {
         this.isPressed = isPressed;
     }
 
-    public boolean getIsPressed() {
-        return isPressed;
-    }
+    public boolean getIsPressed() { return isPressed; }
 
     public void setActuator(double touchPositionX, double touchPositionY) {
         double deltaX = touchPositionX - outerCircleCenterPositionX;

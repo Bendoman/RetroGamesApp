@@ -10,8 +10,8 @@ import com.example.retrogames.gameUtilities.GameObject;
 import java.util.List;
 
 public class PongBall extends BouncingBall {
-    public PongBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius) {
-        super(context, game, gameObjects, positionX, positionY, radius);
+    public PongBall(Context context, GameClass game, List<GameObject> gameObjects, double positionX, double positionY, int radius, double maxUPS) {
+        super(context, game, gameObjects, positionX, positionY, radius, maxUPS);
     }
 
     @Override
