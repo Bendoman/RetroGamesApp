@@ -18,10 +18,10 @@ public class Joypad {
     private Paint leftPaint;
     private Paint rightPaint;
 
-    private Rect upArrow;
-    private Rect downArrow;
-    private Rect leftArrow;
-    private Rect rightArrow;
+    public Rect upArrow;
+    public Rect downArrow;
+    public Rect leftArrow;
+    public Rect rightArrow;
     private int direction;
     private boolean calculated;
 

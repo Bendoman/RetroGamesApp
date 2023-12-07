@@ -14,8 +14,8 @@ public class GameLoop extends Thread {
     private double averageFPS;
     private double averageUPS;
 
-    public final double maxUPS;
-    public final double upsPeriod;
+    public double maxUPS;
+    public double upsPeriod;
 
     public GameLoop(GameClass game, SurfaceHolder surfaceHolder, double maxUPS) {
 
@@ -25,6 +25,11 @@ public class GameLoop extends Thread {
         this.surfaceHolder = surfaceHolder;
     }
 
+    public void setUPS(double UPS)
+    {
+        this.maxUPS = UPS;
+        this.upsPeriod = 1E+3/maxUPS;
+    }
     public double getAverageUPS() {
         return averageUPS;
     }
