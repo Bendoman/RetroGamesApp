@@ -20,6 +20,8 @@ import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
 import com.example.retrogames.pongGame.PongMainActivity;
 import com.example.retrogames.snakeGame.SnakeMainActivity;
+import com.example.retrogames.tilterGame.TilterGame;
+import com.example.retrogames.tilterGame.TilterMainActivity;
 
 public class GameInfo extends AppCompatActivity
 {
@@ -103,6 +105,11 @@ public class GameInfo extends AppCompatActivity
                         break;
                     case "Pong":
                         intent = new Intent(GameInfo.this, PongMainActivity.class);
+                        intent.putExtra("username", user_name);
+                        startActivity(intent);
+                        break;
+                    case "Tilter":
+                        intent = new Intent(GameInfo.this, TilterMainActivity.class);
                         intent.putExtra("username", user_name);
                         startActivity(intent);
                         break;

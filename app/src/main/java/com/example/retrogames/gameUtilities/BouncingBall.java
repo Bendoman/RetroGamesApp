@@ -16,7 +16,7 @@ import java.util.List;
 
 public class BouncingBall {
 
-    private final double maxUPS;
+    protected final double maxUPS;
     // Tying the maximum speed to number of pixel per second by relating it to the UPS
     private double pixelsPerSecond = 400.0;
     private double maxSpeed;
@@ -51,6 +51,22 @@ public class BouncingBall {
 
         this.game = game;
         this.gameObjects = gameObjects;
+        this.positionX = positionX;
+        this.positionY = positionY;
+        this.radius = radius;
+
+        paint = new Paint();
+        int color = ContextCompat.getColor(context, R.color.magenta);
+        paint.setColor(color);
+    }
+
+    public BouncingBall(Context context, GameClass game, double positionX, double positionY, int radius, double maxUPS) {
+        this.maxUPS = maxUPS;
+        maxSpeed = pixelsPerSecond / maxUPS;
+        velocityX = maxSpeed;
+        velocityY = maxSpeed;
+
+        this.game = game;
         this.positionX = positionX;
         this.positionY = positionY;
         this.radius = radius;
