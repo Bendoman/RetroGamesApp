@@ -10,14 +10,11 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.GameClass;
-import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.Joypad;
-import com.example.retrogames.gameUtilities.Joystick;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Snake {
 
@@ -34,7 +31,7 @@ public class Snake {
     private int canvasHeight;
     private int direction;
 
-    private PlayingField playingField;
+    private SnakePlayingField playingField;
     private int playingFieldX;
     private int playingFieldY;
     private int playingFieldWidth;
@@ -44,7 +41,7 @@ public class Snake {
     private Rect fruit;
     private boolean validCoordinates;
 
-    public Snake(Context context, Canvas canvas, GameClass game, PlayingField playingField, int size) {
+    public Snake(Context context, Canvas canvas, GameClass game, SnakePlayingField playingField, int size) {
         this.game = game;
         this.size = size;
         this.playingField = playingField;

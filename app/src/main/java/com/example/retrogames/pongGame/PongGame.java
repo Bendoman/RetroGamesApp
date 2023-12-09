@@ -35,6 +35,7 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     private MovablePaddle player1;
     private MovablePaddle player2;
     List<GameObject> gameObjects;
+    private boolean isRunning;
 
     public PongGame(Context context) {
         super(context);
@@ -53,10 +54,10 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     {
         // Initialize game objects
         gameObjects = new ArrayList<GameObject>();
-        joystick1 = new Joystick(canvas.getWidth()/2, canvas.getHeight() - 150, 70, 40);
+        joystick1 = new Joystick(getContext(), canvas.getWidth()/2, canvas.getHeight() - 150, 70, 40);
         player1 = new MovablePaddle(getContext(), 500, canvas.getHeight() - 300, 250, 50, gameLoop.maxUPS);
 
-        joystick2 = new Joystick(canvas.getWidth()/2, 150, 70, 40);
+        joystick2 = new Joystick(getContext(), canvas.getWidth()/2, 150, 70, 40);
         player2 = new MovablePaddle(getContext(), 500, 250, 250, 50, gameLoop.maxUPS);
 
         gameObjects.add(player1);
@@ -137,6 +138,11 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     public void endGame() {
         // Stop updating the game
         gameLoop.endLoop();
+    }
+
+    @Override
+    public void gameOver() {
+        isRunning = false;
     }
 
     @Override

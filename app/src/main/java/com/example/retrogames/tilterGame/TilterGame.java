@@ -2,19 +2,21 @@ package com.example.retrogames.tilterGame;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 
+import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
-import android.content.pm.ActivityInfo;
+import com.example.retrogames.gameUtilities.GameOver;
 
 
 public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, GameClass, SensorEventListener {
@@ -22,6 +24,12 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
     private int score;
     private GameLoop gameLoop;
     private TilterBall ball;
+    private TilterPlayingField playingField;
+    private float xAcceleration = 0;
+    private float yAcceleration = 0;
+    private int level = 1;
+    public GameOver gameOverText;
+    private boolean isRunning = true;
 
 
     public TilterGame(Context context) {
@@ -49,39 +57,98 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) { endGame(); }
 
     @Override
-    public void onSensorChanged(SensorEvent event) {
-
-    }
+    public void onSensorChanged(SensorEvent event) {}
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
-    }
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 
     @Override
     public void initObjects(Canvas canvas) {
-        ball = new TilterBall(getContext(), this,  250, 50, 100, 60);
+        playingField = new TilterPlayingField(canvas);
+        ball = new TilterBall(getContext(), this,  canvas.getWidth()/2,
+                canvas.getHeight()/2, 30, 60, playingField);
+        gameOverText = new GameOver(canvas);
     }
 
     @Override
     public void update(Canvas canvas) {
-//        ball.update();
+        ball.update(xAcceleration, yAcceleration);
     }
 
     @Override
     public void draw(Canvas canvas) {
         super.draw(canvas);
         ball.draw(canvas);
+        playingField.draw(canvas);
+        drawScore(canvas);
+        if(!isRunning)
+        {
+            gameOverText.draw(canvas);
+            endGame();
+        }
+    }
+
+    public void drawScore(Canvas canvas) {
+        String score = Integer.toString(this.score);
+        String level = Integer.toString(this.level);
+        Paint paint = new Paint();
+        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        paint.setColor(color);
+        paint.setTextSize(50);
+        canvas.drawText("Score: " + score, playingField.positionX,
+                playingField.positionY + playingField.playingFieldHeight + 65, paint);
+        canvas.drawText("Level: " + level, playingField.positionX,
+                playingField.positionY + playingField.playingFieldHeight + 115, paint);
     }
 
     @Override
-    public void endGame() { gameLoop.endLoop(); }
+    public void endGame() {
+        gameLoop.endLoop();
+    }
+
+    @Override
+    public void gameOver() {
+        isRunning = false;
+    }
 
     @Override
     public void removeObject(GameObject rect) {}
 
     @Override
-    public void addScore(int i) { score += i; }
+    public void addScore(int i) {
+        score += i;
+        if(score % 2 == 0) {
+            level++;
+            ball.reduceFieldSize();
+        }
+    }
     @Override
     public double getScore() { return score; }
 
+    public void updateAcceleration(float deltaX, float deltaY) {
+        if(deltaX < xAcceleration && xAcceleration > 0)
+        {
+            if(deltaX < 0)
+                this.xAcceleration = deltaX;
+        }
+        else if(deltaX > xAcceleration && xAcceleration < 0)
+        {
+            if(deltaX > 0)
+                this.xAcceleration = deltaX;
+        }
+        else
+            this.xAcceleration = deltaX;
+
+        if(deltaY < yAcceleration && yAcceleration > 0)
+        {
+            if(deltaY < 0)
+                this.yAcceleration = deltaY;
+        }
+        else if(deltaY > yAcceleration && yAcceleration < 0)
+        {
+            if(deltaY > 0)
+                this.yAcceleration = deltaY;
+        }
+        else
+            this.yAcceleration = deltaY;
+    }
 }

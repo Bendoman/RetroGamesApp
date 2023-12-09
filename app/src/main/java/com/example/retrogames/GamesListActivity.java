@@ -40,7 +40,6 @@ public class GamesListActivity extends AppCompatActivity
     private String userHighScoreStrings[] = { " ", " ", " ", " " };
     private String globalHighScoreStrings[] = { " ", " ", " ", " " };
     private String gameNames[] = { "Snake", "Breakout", "Tilter", "Pong" };
-    private String descriptions[] = { "placeholder", "placeholder", "placeholder", "placeholder" };
     private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
 
     public double snakeHighScore;
@@ -93,12 +92,10 @@ public class GamesListActivity extends AppCompatActivity
                 Intent intent = new Intent(activity, GameInfo.class);
 
                 String game = activity.gameNames[i - 1];
-                String description  = activity.descriptions[i - 1];
 
                 Bundle b = new Bundle();
                 b.putInt("image", i - 1);
                 b.putString("game", game);
-                b.putString("description", description);
                 b.putString("user_name", activity.username);
                 b.putString("globalHighScore", activity.globalHighScoreStrings[i - 1]);
                 b.putString("userHighScore", activity.userHighScoreStrings[i - 1]);

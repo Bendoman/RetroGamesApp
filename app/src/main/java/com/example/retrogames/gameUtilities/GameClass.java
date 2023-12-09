@@ -9,6 +9,7 @@ public interface GameClass {
     public void update(Canvas canvas);
     public void endGame();
 
+    public void gameOver();
     public void removeObject(GameObject rect);
 
     public void addScore(int i);

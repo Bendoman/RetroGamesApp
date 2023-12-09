@@ -41,18 +41,22 @@ public class Joypad {
         upPaint = new Paint();
         upPaint.setColor(Color.WHITE);
         upPaint.setStyle(Paint.Style.STROKE);
+        upPaint.setStrokeWidth(3);
 
         downPaint = new Paint();
         downPaint.setColor(Color.WHITE);
         downPaint.setStyle(Paint.Style.STROKE);
+        downPaint.setStrokeWidth(3);
 
         leftPaint = new Paint();
         leftPaint.setColor(Color.WHITE);
         leftPaint.setStyle(Paint.Style.STROKE);
+        leftPaint.setStrokeWidth(3);
 
         rightPaint = new Paint();
         rightPaint.setColor(Color.WHITE);
         rightPaint.setStyle(Paint.Style.STROKE);
+        rightPaint.setStrokeWidth(3);
     }
 
     public void update() {
@@ -105,6 +109,5 @@ public class Joypad {
         downPaint.setStyle(Paint.Style.STROKE);
         leftPaint.setStyle(Paint.Style.STROKE);
         rightPaint.setStyle(Paint.Style.STROKE);
-
     }
 }

@@ -4,4 +4,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="magenta">#FF09FF</color>
     <color name="player">#FFF</color>
+    ball_inner
+    <color name="ball_outer">#990099</color>
+    <color name="ball_inner">#ff00ff</color>
+
+    <color name="joystick_outer">#222745</color>
+    <color name="joystick_inner">#752075</color>
 </resources>

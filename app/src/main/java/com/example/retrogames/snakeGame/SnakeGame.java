@@ -4,7 +4,6 @@ package com.example.retrogames.snakeGame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -18,7 +17,6 @@ import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
 import com.example.retrogames.gameUtilities.Joypad;
-import com.example.retrogames.gameUtilities.Joystick;
 
 public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, GameClass {
     private static final float MIN_DISTANCE = 15;
@@ -26,12 +24,13 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
     private GameLoop gameLoop;
     private Snake snake;
     private Joypad joypad;
-    private PlayingField playingField;
+    private SnakePlayingField playingField;
     private int level = 1;
     private float x1;
     private float y1;
     private float x2;
     private float y2;
+    private boolean isRunning;
 
     public SnakeGame(Context context) {
         super(context);
@@ -100,7 +99,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
 
     @Override
     public void initObjects(Canvas canvas) {
-        playingField = new PlayingField(canvas);
+        playingField = new SnakePlayingField(canvas);
 
         snake = new Snake(getContext(), canvas, this, playingField, 50);
         joypad = new Joypad(canvas.getWidth()/2 - 50, canvas.getHeight() - 250);
@@ -125,6 +124,11 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
     public void endGame() {
         // Stop updating the game
         gameLoop.endLoop();
+    }
+
+    @Override
+    public void gameOver() {
+        isRunning = false;
     }
 
     @Override

@@ -1,8 +1,13 @@
 package com.example.retrogames.gameUtilities;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+
+import androidx.core.content.ContextCompat;
+
+import com.example.retrogames.R;
 
 public class Joystick {
     private Paint innerCirclePaint;
@@ -18,7 +23,7 @@ public class Joystick {
     private double actuatorX;
     private double actuatorY;
 
-    public Joystick(int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius) {
+    public Joystick(Context context, int centerPositionX, int centerPositionY, int outerCircleRadius, int innerCircleRadius) {
         outerCircleCenterPositionX = centerPositionX;
         outerCircleCenterPositionY = centerPositionY;
         innerCircleCenterPositionX = centerPositionX;
@@ -30,11 +35,11 @@ public class Joystick {
 
         // Paint for circles
         outerCirclePaint = new Paint();
-        outerCirclePaint.setColor(Color.GRAY);
+        outerCirclePaint.setColor(ContextCompat.getColor(context, R.color.joystick_outer));
         outerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
 
         innerCirclePaint = new Paint();
-        innerCirclePaint.setColor(Color.BLUE);
+        innerCirclePaint.setColor(ContextCompat.getColor(context, R.color.joystick_inner));
         innerCirclePaint.setStyle(Paint.Style.FILL_AND_STROKE);
     }
     public void draw(Canvas canvas) {

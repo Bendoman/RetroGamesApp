@@ -36,6 +36,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
 
     List<GameObject> gameObjects;
     private int level = 1;
+    private boolean isRunning;
 
     public BreakoutGame(Context context) {
         super(context);
@@ -53,7 +54,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     {
         // Initialize game objects
         gameObjects = new ArrayList<GameObject>();
-        joystick = new Joystick(canvas.getWidth()/2, canvas.getHeight()-140, 70, 40);
+        joystick = new Joystick(getContext(), canvas.getWidth()/2, canvas.getHeight()-140, 70, 40);
         player = new MovablePaddle(getContext(), 500, 1500, 250, 50, gameLoop.maxUPS);
         gameObjects.add(player);
         initBricks(canvas);
@@ -156,6 +157,11 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     public void endGame() {
         // Stop updating the game
         gameLoop.endLoop();
+    }
+
+    @Override
+    public void gameOver() {
+        isRunning = false;
     }
 
     public void addScore(int i) {

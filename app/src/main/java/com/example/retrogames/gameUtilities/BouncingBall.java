@@ -3,20 +3,18 @@ package com.example.retrogames.gameUtilities;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
-import com.example.retrogames.breakoutGame.BreakoutGame;
-import com.example.retrogames.gameUtilities.GameLoop;
-import com.example.retrogames.gameUtilities.GameObject;
 
 import java.util.List;
 
 public class BouncingBall {
 
     protected final double maxUPS;
+    private final int color2;
+    private int color1;
     // Tying the maximum speed to number of pixel per second by relating it to the UPS
     private double pixelsPerSecond = 400.0;
     private double maxSpeed;
@@ -39,7 +37,7 @@ public class BouncingBall {
     protected double velocityX;
     protected double velocityY;
     protected int radius;
-
+    protected Context context;
     protected Paint paint;
 
 
@@ -54,10 +52,12 @@ public class BouncingBall {
         this.positionX = positionX;
         this.positionY = positionY;
         this.radius = radius;
+        this.context = context;
 
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.magenta);
-        paint.setColor(color);
+        color1 = ContextCompat.getColor(context, R.color.ball_outer);
+        color2 = ContextCompat.getColor(context, R.color.ball_inner);
+        paint.setColor(color1);
     }
 
     public BouncingBall(Context context, GameClass game, double positionX, double positionY, int radius, double maxUPS) {
@@ -72,12 +72,17 @@ public class BouncingBall {
         this.radius = radius;
 
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.magenta);
-        paint.setColor(color);
+        color1 = ContextCompat.getColor(context, R.color.ball_outer);
+        color2 = ContextCompat.getColor(context, R.color.ball_inner);
+        paint.setColor(color1);
     }
 
     public void draw(Canvas canvas) {
+        paint.setColor(color1);
         canvas.drawCircle((float) positionX, (float) positionY, radius, paint);
+        paint.setColor(color2);
+        canvas.drawCircle((float) positionX, (float) positionY, (float) (radius/1.35), paint);
+
         if(canvasWidth == 0) {
             canvasWidth = canvas.getWidth();
             canvasHeight = canvas.getHeight();
@@ -98,7 +103,6 @@ public class BouncingBall {
 
             if(intersects(rect))
             {
-
                 if (rect.getVelocityX() > 0) // object came from the left
                     positionX = rect.getPositionX() - radius;
                 else if (rect.getVelocityX() < 0) // object came from the right
