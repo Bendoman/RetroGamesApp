@@ -69,8 +69,6 @@ public class GameInfo extends AppCompatActivity
     {
         super.onCreate(savedInstanceState);
 
-
-
         setContentView(layout.activity_game_info);
         Window window = getWindow();
         window.setFlags(
@@ -120,17 +118,17 @@ public class GameInfo extends AppCompatActivity
                     case "Snake":
                         intent = new Intent(GameInfo.this, SnakeMainActivity.class);
                         intent.putExtra("username", user_name);
-                        startActivity(intent);
+                        activityResultLauncher.launch(intent);
                         break;
                     case "Breakout":
                         intent = new Intent(GameInfo.this, BreakoutMainActivity.class);
                         intent.putExtra("username", user_name);
-                        startActivity(intent);
+                        activityResultLauncher.launch(intent);
                         break;
                     case "Pong":
                         intent = new Intent(GameInfo.this, PongMainActivity.class);
                         intent.putExtra("username", user_name);
-                        startActivity(intent);
+                        activityResultLauncher.launch(intent);
                         break;
                     case "Tilter":
                         intent = new Intent(GameInfo.this, TilterMainActivity.class);

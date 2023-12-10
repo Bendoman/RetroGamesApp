@@ -1,11 +1,14 @@
 package com.example.retrogames.tilterGame;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -29,11 +32,13 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
     private float yAcceleration = 0;
     private int level = 1;
     public GameOver gameOverText;
-    private boolean isRunning = true;
+    public boolean isRunning = true;
+    private TilterMainActivity main;
 
 
-    public TilterGame(Context context) {
+    public TilterGame(Context context, TilterMainActivity main) {
         super(context);
+        this.main = main;
 
         // Get surface holder and callback
         SurfaceHolder surfaceHolder = getHolder();
@@ -45,6 +50,29 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
 
 
         setFocusable(true);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event) {
+        switch(event.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                return true;
+            case MotionEvent.ACTION_UP:
+                if (!isRunning)
+                {
+                    float x = event.getX();
+                    float y = event.getY();
+                    GameOver g = gameOverText;
+                    if(x > g.retryLeft && x < g.retryRight && y > g.retryTop && y < g.retryBottom)
+                        main.restart();
+                    else if(x > g.backLeft && x < g.backRight && y > g.backTop && y < g.backBottom)
+                        main.finishActivity();
+                }
+
+                return true;
+        }
+
+        return super.onTouchEvent(event);
     }
 
     @Override

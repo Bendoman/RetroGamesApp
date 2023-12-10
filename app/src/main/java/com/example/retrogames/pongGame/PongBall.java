@@ -27,7 +27,7 @@ public class PongBall extends BouncingBall {
         {
             GameObject rect = gameObjects.get(i);
             if(canvasHeight != 0 && (positionY > canvasHeight - 100 || positionY < 100))
-                game.endGame();
+                game.gameOver();
 
             if(intersects(rect))
             {

@@ -3,6 +3,7 @@ package com.example.retrogames.pongGame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -14,6 +15,7 @@ import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.BouncingBall;
 import com.example.retrogames.breakoutGame.BreakoutGame;
 import com.example.retrogames.gameUtilities.GameClass;
+import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.MovablePaddle;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -35,10 +37,14 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     private MovablePaddle player1;
     private MovablePaddle player2;
     List<GameObject> gameObjects;
-    private boolean isRunning;
+    public GameOver gameOverText;
 
-    public PongGame(Context context) {
+    private boolean isRunning = true;
+    private PongMainActivity main;
+
+    public PongGame(Context context, PongMainActivity main) {
         super(context);
+        this.main = main;
 
         // Get surface holder and callback
         SurfaceHolder surfaceHolder = getHolder();
@@ -64,6 +70,7 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         gameObjects.add(player2);
 
         ball = new PongBall(getContext(), this, gameObjects, 500, 500, 25, 60);
+        gameOverText = new GameOver(canvas);
     }
 
     @Override
@@ -88,6 +95,18 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
                 joystick1.resetActuator();
                 joystick2.setIsPressed(false);
                 joystick2.resetActuator();
+
+                if (!isRunning)
+                {
+                    float x = event.getX();
+                    float y = event.getY();
+                    GameOver g = gameOverText;
+                    if(x > g.retryLeft && x < g.retryRight && y > g.retryTop && y < g.retryBottom)
+                        main.restart();
+                    else if(x > g.backLeft && x < g.backRight && y > g.backTop && y < g.backBottom)
+                        main.finishActivity();
+                }
+
                 return true;
         }
 
@@ -132,6 +151,11 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         player2.draw(canvas);
         ball.draw(canvas);
         drawScore(canvas);
+        if(!isRunning)
+        {
+            gameOverText.draw(canvas);
+            endGame();
+        }
     }
 
     @Override

@@ -40,16 +40,34 @@ public class BreakoutMainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
         
-        game = new BreakoutGame(this);
+        game = new BreakoutGame(this, this);
         setContentView(game);
+    }
+
+    public void restart() {
+        updateScores();
+        recreate();
+    }
+
+    public void finishActivity() {
+        updateScores();
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("score", game.getScore());
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
     public void onBackPressed() {
+        updateScores();
+        super.onBackPressed();
+    }
+
+    public void updateScores() {
         if(game.getScore() > user.getBreakout_high_score()) {
             user.setBreakout_high_score(game.getScore());
             userDAO.updateUser(user);
         }
-        super.onBackPressed();
     }
 }

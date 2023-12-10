@@ -39,16 +39,33 @@ public class PongMainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
 
-        game = new PongGame(this);
+        game = new PongGame(this, this);
         setContentView(game);
+    }
+
+    public void restart() {
+        updateScores();
+        recreate();
+    }
+    public void finishActivity() {
+        updateScores();
+
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("score", game.getScore());
+        setResult(RESULT_OK, returnIntent);
+        finish();
     }
 
     @Override
     public void onBackPressed() {
+        updateScores();
+        super.onBackPressed();
+    }
+
+    public void updateScores() {
         if(game.getScore() > user.getPong_high_score()) {
             user.setPong_high_score(game.getScore());
             userDAO.updateUser(user);
         }
-        super.onBackPressed();
     }
 }

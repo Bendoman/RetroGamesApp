@@ -15,6 +15,7 @@ import com.example.retrogames.gameUtilities.BouncingBall;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
+import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.Joystick;
 import com.example.retrogames.gameUtilities.MovablePaddle;
 
@@ -27,6 +28,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     private MovablePaddle player;
     private Joystick joystick;
     private GameLoop gameLoop;
+    public GameOver gameOverText;
     private BreakoutBall ball;
 
     private int brickLayers = 1;
@@ -36,10 +38,12 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
 
     List<GameObject> gameObjects;
     private int level = 1;
-    private boolean isRunning;
+    private boolean isRunning = true;
+    private BreakoutMainActivity main;
 
-    public BreakoutGame(Context context) {
+    public BreakoutGame(Context context, BreakoutMainActivity main) {
         super(context);
+        this.main = main;
 
         // Get surface holder and callback
         SurfaceHolder surfaceHolder = getHolder();
@@ -60,6 +64,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         initBricks(canvas);
 
         ball = new BreakoutBall(getContext(), this, gameObjects, 500, 500, 25, 60);
+        gameOverText = new GameOver(canvas);
     }
 
     public void initBricks(Canvas canvas)
@@ -90,6 +95,18 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
             case MotionEvent.ACTION_UP:
                 joystick.setIsPressed(false);
                 joystick.resetActuator();
+
+                if (!isRunning)
+                {
+                    float x = event.getX();
+                    float y = event.getY();
+                    GameOver g = gameOverText;
+                    if(x > g.retryLeft && x < g.retryRight && y > g.retryTop && y < g.retryBottom)
+                        main.restart();
+                    else if(x > g.backLeft && x < g.backRight && y > g.backTop && y < g.backBottom)
+                        main.finishActivity();
+                }
+
                 return true;
         }
 
@@ -117,6 +134,12 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         for(int i = 0; i < gameObjects.size(); i++)
         {
             gameObjects.get(i).draw(canvas);
+        }
+
+        if(!isRunning)
+        {
+            gameOverText.draw(canvas);
+            endGame();
         }
     }
 

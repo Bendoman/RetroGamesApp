@@ -27,7 +27,7 @@ public class BreakoutBall extends BouncingBall {
         {
             GameObject rect = gameObjects.get(i);
             if(i == 0 && (positionY + radius) > (rect.getPositionY() + rect.getHeight() + 100))
-                game.endGame();
+                game.gameOver();
 
             if(intersects(rect))
             {

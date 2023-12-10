@@ -2,6 +2,7 @@ package com.example.retrogames.snakeGame;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.util.Log;
@@ -16,10 +17,12 @@ import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
+import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.Joypad;
 
 public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, GameClass {
     private static final float MIN_DISTANCE = 15;
+    private final SnakeMainActivity main;
     private int score;
     private GameLoop gameLoop;
     private Snake snake;
@@ -30,11 +33,13 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
     private float y1;
     private float x2;
     private float y2;
-    private boolean isRunning;
 
-    public SnakeGame(Context context) {
+    public boolean isRunning = true;
+    public GameOver gameOverText;
+
+    public SnakeGame(Context context, SnakeMainActivity main) {
         super(context);
-
+        this.main = main;
         // Get surface holder and callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
@@ -59,6 +64,15 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
                 // Dealing with swipe gesture
                 x2 = event.getX();
                 y2 = event.getY();
+
+                if (!isRunning)
+                {
+                    GameOver g = gameOverText;
+                    if(x2 > g.retryLeft && x2 < g.retryRight && y2 > g.retryTop && y2 < g.retryBottom)
+                        main.restart();
+                    else if(x2 > g.backLeft && x2 < g.backRight && y2 > g.backTop && y2 < g.backBottom)
+                        main.finishActivity();
+                }
 
                 // Change in position
                 float deltaX = x1 - x2;
@@ -103,6 +117,8 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
 
         snake = new Snake(getContext(), canvas, this, playingField, 50);
         joypad = new Joypad(canvas.getWidth()/2 - 50, canvas.getHeight() - 250);
+
+        gameOverText = new GameOver(canvas);
     }
 
     @Override
@@ -118,6 +134,11 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
         snake.draw(canvas);
         playingField.draw(canvas);
         drawScore(canvas);
+        if(!isRunning)
+        {
+            gameOverText.draw(canvas);
+            endGame();
+        }
     }
 
     @Override

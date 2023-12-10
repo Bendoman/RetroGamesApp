@@ -150,7 +150,7 @@ public class Snake {
         for(int i = 0; i < snakeBody.size(); i++)
         {
             if(positionX == snakeBody.get(i).left && positionY == snakeBody.get(i).top)
-                game.endGame();
+                game.gameOver();
         }
     }
 

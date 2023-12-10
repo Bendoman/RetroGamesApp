@@ -12,6 +12,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.Window;
 import android.view.WindowManager;
@@ -54,39 +55,36 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
         
-        game = new TilterGame(this);
+        game = new TilterGame(this, this);
         setContentView(game);
     }
 
-    @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        switch(event.getAction()) {
-            case MotionEvent.ACTION_UP:
-                float x = event.getX();
-                float y = event.getY();
-                GameOver g = game.gameOverText;
 
-                if(x > g.retryX && x < g.retryX + g.retryWidth && y > g.retryY && y < g.retryY + g.retryHeight)
-                {
-                    Intent returnIntent = new Intent();
-                    returnIntent.putExtra("score", game.getScore());
-                    setResult(RESULT_OK, returnIntent);
-                    finish();
-                }
+    public void finishActivity() {
+        updateScores();
 
-                return true;
-        }
+        Intent returnIntent = new Intent();
+        returnIntent.putExtra("score", game.getScore());
+        setResult(RESULT_OK, returnIntent);
+        finish();
+    }
 
-        return super.onTouchEvent(event);
+    public void restart() {
+        updateScores();
+        recreate();
     }
 
     @Override
     public void onBackPressed() {
+        updateScores();
+        super.onBackPressed();
+    }
+
+    public void updateScores() {
         if(game.getScore() > user.getTilter_high_score()) {
             user.setTilter_high_score(game.getScore());
             userDAO.updateUser(user);
         }
-        super.onBackPressed();
     }
 
     @Override
