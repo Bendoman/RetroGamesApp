@@ -12,11 +12,12 @@
         android:id="@+id/listButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Games list"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="30dp"
+        android:backgroundTint="@color/info_background"
+        android:text="GAMES LIST"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameField" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameButton" />
 
     <TextView
         android:id="@+id/title"
@@ -25,20 +26,22 @@
         android:layout_height="wrap_content"
         android:textSize="50dp"
         android:textStyle="bold"
-        android:textColor="#cf29e2"
+        android:textColor="@color/white"
         android:layout_marginTop="20dp"
         android:text="RETRO GAMES"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
+        android:background="@color/info_background"
         app:layout_constraintTop_toTopOf="parent"
         />
 
     <Button
         android:id="@+id/userNameButton"
         android:layout_width="wrap_content"
+        android:backgroundTint="@color/info_background"
         android:layout_height="wrap_content"
         android:layout_marginTop="30dp"
-        android:text="Set username"
+        android:text="SET USERNAME"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/userNameField" />
@@ -50,7 +53,7 @@
         android:layout_marginTop="30dp"
         android:ems="10"
         android:padding="15dp"
-        android:hint="Username"
+        android:hint="USERNAME"
         android:textColor="@color/white"
         android:textColorHint="#BABABA"
         android:background="#7C2A83"

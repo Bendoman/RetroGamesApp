@@ -10,4 +10,6 @@
 
     <color name="joystick_outer">#222745</color>
     <color name="joystick_inner">#752075</color>
+
+    <color name="info_background">#4a148c</color>
 </resources>
