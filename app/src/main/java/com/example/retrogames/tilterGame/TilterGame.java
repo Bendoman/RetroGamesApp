@@ -94,7 +94,7 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
         playingField = new TilterPlayingField(canvas);
         ball = new TilterBall(getContext(), this,  canvas.getWidth()/2,
                 canvas.getHeight()/2, 30, 60, playingField);
-        gameOverText = new GameOver(canvas);
+        gameOverText = new GameOver(canvas, getContext());
     }
 
     @Override

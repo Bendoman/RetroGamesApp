@@ -1,10 +1,15 @@
 package com.example.retrogames.gameUtilities;
 
+import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.Typeface;
+
+import androidx.core.content.ContextCompat;
+
+import com.example.retrogames.R;
 
 public class GameOver {
     private final Paint paint;
@@ -33,10 +38,10 @@ public class GameOver {
     private final String retryText = "TRY AGAIN";
     private final String backText = "BACK TO MENU";
 
-    public GameOver(Canvas canvas) {
+    public GameOver(Canvas canvas, Context context) {
         paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
-        paint.setColor(Color.MAGENTA);
+        paint.setColor(ContextCompat.getColor(context, R.color.white));
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
 
@@ -64,7 +69,7 @@ public class GameOver {
         this.backBottom = backY + paint.descent() + 15;
 
         rectPaint = new Paint();
-        rectPaint.setColor(Color.argb(255, 0, 255, 255));
+        rectPaint.setColor(ContextCompat.getColor(context, R.color.game_over_background));
         rectPaint.setStyle(Paint.Style.FILL);
     }
 

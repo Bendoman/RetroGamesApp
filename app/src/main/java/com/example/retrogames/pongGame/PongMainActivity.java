@@ -59,7 +59,7 @@ public class PongMainActivity extends Activity {
     @Override
     public void onBackPressed() {
         updateScores();
-        super.onBackPressed();
+        finishActivity();
     }
 
     public void updateScores() {

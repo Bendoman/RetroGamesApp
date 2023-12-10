@@ -77,7 +77,7 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
     @Override
     public void onBackPressed() {
         updateScores();
-        super.onBackPressed();
+        finishActivity();
     }
 
     public void updateScores() {

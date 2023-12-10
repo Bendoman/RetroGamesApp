@@ -70,7 +70,7 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         gameObjects.add(player2);
 
         ball = new PongBall(getContext(), this, gameObjects, 500, 500, 25, 60);
-        gameOverText = new GameOver(canvas);
+        gameOverText = new GameOver(canvas, getContext());
     }
 
     @Override

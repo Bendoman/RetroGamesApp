@@ -64,7 +64,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         initBricks(canvas);
 
         ball = new BreakoutBall(getContext(), this, gameObjects, 500, 500, 25, 60);
-        gameOverText = new GameOver(canvas);
+        gameOverText = new GameOver(canvas, getContext());
     }
 
     public void initBricks(Canvas canvas)

@@ -118,7 +118,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
         snake = new Snake(getContext(), canvas, this, playingField, 50);
         joypad = new Joypad(canvas.getWidth()/2 - 50, canvas.getHeight() - 250);
 
-        gameOverText = new GameOver(canvas);
+        gameOverText = new GameOver(canvas, getContext());
     }
 
     @Override

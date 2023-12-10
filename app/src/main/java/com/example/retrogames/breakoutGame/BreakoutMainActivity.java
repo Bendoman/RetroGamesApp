@@ -45,13 +45,19 @@ public class BreakoutMainActivity extends Activity {
     }
 
     public void restart() {
+        // So that any high scores are kept even if the user restarts
         updateScores();
+
+        // Re-creates the activity instead of finishing and creating a new one
+        // so that the responseListener still functions in the info activity.
         recreate();
     }
 
     public void finishActivity() {
+        // Updating the score in the database
         updateScores();
 
+        // Returns the current score from the game to be added to the last score field
         Intent returnIntent = new Intent();
         returnIntent.putExtra("score", game.getScore());
         setResult(RESULT_OK, returnIntent);
@@ -60,11 +66,14 @@ public class BreakoutMainActivity extends Activity {
 
     @Override
     public void onBackPressed() {
+        // Updating the score in the database
         updateScores();
-        super.onBackPressed();
+        // Finishes the activity so that the last score field gets filled out in the info page
+        finishActivity();
     }
 
     public void updateScores() {
+        // If the current game score is greater than the user's high score, update the field
         if(game.getScore() > user.getBreakout_high_score()) {
             user.setBreakout_high_score(game.getScore());
             userDAO.updateUser(user);

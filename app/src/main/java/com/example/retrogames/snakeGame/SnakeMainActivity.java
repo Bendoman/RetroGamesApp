@@ -63,7 +63,7 @@ public class SnakeMainActivity extends Activity {
     @Override
     public void onBackPressed() {
         updateScores();
-        super.onBackPressed();
+        finishActivity();
     }
 
     public void updateScores() {
