@@ -11,7 +11,7 @@
     <color name="joystick_outer">#222745</color>
     <color name="joystick_inner">#752075</color>
 
-    <color name="info_background">#920075</color>
+    <color name="info_background">#540D6E</color>
 
     <color name="game_over_background">#540D6E</color>
     <color name="game_over_text">#2DE2E6</color>

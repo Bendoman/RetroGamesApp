@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -162,6 +163,9 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
 
     @Override
     public void addScore(int i) {
+
+        main.playSound(1);
+
         score += i;
         if(gameLoop.maxUPS < 10 && score % 5 == 0) {
             gameLoop.setUPS(gameLoop.maxUPS + 0.5);
