@@ -26,9 +26,6 @@ public class SnakeMainActivity extends Activity {
     public UserDAO userDAO;
     private String username;
     private SnakeGame game;
-    private SoundPool soundPool;
-    private int successSound;
-    private int gameOverSound;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,18 +45,6 @@ public class SnakeMainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
-
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(1)
-                .setAudioAttributes(audioAttributes)
-                .build();
-
-        successSound = soundPool.load(this, R.raw.success, 1);
-        gameOverSound = soundPool.load(this, R.raw.gameover, 1);
 
         game = new SnakeGame(this, this);
         setContentView(game);
@@ -89,26 +74,5 @@ public class SnakeMainActivity extends Activity {
             user.setSnake_high_score(game.getScore());
             userDAO.updateUser(user);
         }
-    }
-
-    public void playSound(int i) {
-        int sound = -1;
-        switch (i) {
-            case Constants.SUCCESS_SOUND:
-                sound = successSound;
-                break;
-            case Constants.GAME_OVER_SOUND:
-                sound = gameOverSound;
-                break;
-        }
-        if(sound != -1)
-            soundPool.play(sound,1, 1, 0, 0, 1);
-    }
-
-    @Override
-    protected void onDestroy() {
-        soundPool.release();
-        soundPool = null;
-        super.onDestroy();
     }
 }

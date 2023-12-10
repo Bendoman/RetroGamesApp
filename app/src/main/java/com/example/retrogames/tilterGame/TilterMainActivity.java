@@ -31,12 +31,8 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
 
     private User user;
     public UserDAO userDAO;
-    private SoundPool soundPool;
     private String username;
     private TilterGame game;
-    private int successSound;
-    private int gameOverSound;
-    private int gameStartSound;
     private SensorManager sensorManager;
 
     @Override
@@ -57,19 +53,6 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
-
-        AudioAttributes audioAttributes = new AudioAttributes.Builder()
-                .setUsage(AudioAttributes.USAGE_GAME)
-                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                .build();
-        soundPool = new SoundPool.Builder()
-                .setMaxStreams(1)
-                .setAudioAttributes(audioAttributes)
-                .build();
-
-        successSound = soundPool.load(this, R.raw.success, 1);
-        gameOverSound = soundPool.load(this, R.raw.gameover, 1);
-        gameStartSound = soundPool.load(this, R.raw.gamestart, 1);
 
         // Get a reference to SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -133,26 +116,5 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
         // Unregister the listener so that the app doesn't crash
         sensorManager.unregisterListener(this);
         super.onStop();
-    }
-
-    public void playSound(int i) {
-        int sound = -1;
-        switch (i) {
-            case Constants.SUCCESS_SOUND:
-                sound = successSound;
-                break;
-            case Constants.GAME_OVER_SOUND:
-                sound = gameOverSound;
-                break;
-        }
-        if(sound != -1)
-            soundPool.play(sound,1, 1, 0, 0, 1);
-    }
-
-    @Override
-    protected void onDestroy() {
-        soundPool.release();
-        soundPool = null;
-        super.onDestroy();
     }
 }

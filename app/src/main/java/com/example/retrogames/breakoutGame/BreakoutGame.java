@@ -185,12 +185,10 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
 
     @Override
     public void gameOver() {
-        main.playSound(Constants.GAME_OVER_SOUND);
         isRunning = false;
     }
 
     public void addScore(int i) {
-        main.playSound(Constants.BLOCK_HIT_SOUND);
         this.score += i;
     }
 

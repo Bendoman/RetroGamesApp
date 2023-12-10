@@ -168,7 +168,6 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     @Override
     public void gameOver() {
         isRunning = false;
-        main.playSound(Constants.GAME_OVER_SOUND);
     }
 
     @Override
@@ -176,7 +175,6 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
 
     @Override
     public void addScore(int i) {
-        main.playSound(Constants.BLOCK_HIT_SOUND);
         this.score += i;
     }
     @Override
