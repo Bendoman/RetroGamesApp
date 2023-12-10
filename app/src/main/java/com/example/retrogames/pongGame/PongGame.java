@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat;
 import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.BouncingBall;
 import com.example.retrogames.breakoutGame.BreakoutGame;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.MovablePaddle;
@@ -167,13 +168,17 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     @Override
     public void gameOver() {
         isRunning = false;
+        main.playSound(Constants.GAME_OVER_SOUND);
     }
 
     @Override
     public void removeObject(GameObject rect) { gameObjects.remove(rect); }
 
     @Override
-    public void addScore(int i) { this.score += i; }
+    public void addScore(int i) {
+        main.playSound(Constants.BLOCK_HIT_SOUND);
+        this.score += i;
+    }
     @Override
     public double getScore() { return this.score; }
 }

@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -156,6 +157,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
     @Override
     public void gameOver() {
         isRunning = false;
+        main.playSound(Constants.GAME_OVER_SOUND);
     }
 
     @Override
@@ -163,9 +165,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
 
     @Override
     public void addScore(int i) {
-
-        main.playSound(1);
-
+        main.playSound(Constants.SUCCESS_SOUND);
         score += i;
         if(gameLoop.maxUPS < 10 && score % 5 == 0) {
             gameLoop.setUPS(gameLoop.maxUPS + 0.5);

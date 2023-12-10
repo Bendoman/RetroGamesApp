@@ -11,6 +11,8 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -21,6 +23,7 @@ import com.example.retrogames.R;
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.pongGame.PongGame;
 
@@ -28,8 +31,12 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
 
     private User user;
     public UserDAO userDAO;
+    private SoundPool soundPool;
     private String username;
     private TilterGame game;
+    private int successSound;
+    private int gameOverSound;
+    private int gameStartSound;
     private SensorManager sensorManager;
 
     @Override
@@ -50,7 +57,20 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
-    
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        successSound = soundPool.load(this, R.raw.success, 1);
+        gameOverSound = soundPool.load(this, R.raw.gameover, 1);
+        gameStartSound = soundPool.load(this, R.raw.gamestart, 1);
+
         // Get a reference to SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
@@ -113,5 +133,26 @@ public class TilterMainActivity extends Activity implements SensorEventListener 
         // Unregister the listener so that the app doesn't crash
         sensorManager.unregisterListener(this);
         super.onStop();
+    }
+
+    public void playSound(int i) {
+        int sound = -1;
+        switch (i) {
+            case Constants.SUCCESS_SOUND:
+                sound = successSound;
+                break;
+            case Constants.GAME_OVER_SOUND:
+                sound = gameOverSound;
+                break;
+        }
+        if(sound != -1)
+            soundPool.play(sound,1, 1, 0, 0, 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        soundPool.release();
+        soundPool = null;
+        super.onDestroy();
     }
 }

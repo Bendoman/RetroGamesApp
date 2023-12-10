@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.BouncingBall;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -184,10 +185,12 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
 
     @Override
     public void gameOver() {
+        main.playSound(Constants.GAME_OVER_SOUND);
         isRunning = false;
     }
 
     public void addScore(int i) {
+        main.playSound(Constants.BLOCK_HIT_SOUND);
         this.score += i;
     }
 

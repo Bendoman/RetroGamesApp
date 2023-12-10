@@ -17,6 +17,7 @@ import com.example.retrogames.breakoutGame.BreakoutGame;
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameOver;
 
 public class SnakeMainActivity extends Activity {
@@ -91,7 +92,17 @@ public class SnakeMainActivity extends Activity {
     }
 
     public void playSound(int i) {
-        soundPool.play(successSound,1, 1, 0, 0, 1);
+        int sound = -1;
+        switch (i) {
+            case Constants.SUCCESS_SOUND:
+                sound = successSound;
+                break;
+            case Constants.GAME_OVER_SOUND:
+                sound = gameOverSound;
+                break;
+        }
+        if(sound != -1)
+            soundPool.play(sound,1, 1, 0, 0, 1);
     }
 
     @Override

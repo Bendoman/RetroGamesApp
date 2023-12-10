@@ -2,6 +2,8 @@ package com.example.retrogames.breakoutGame;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.SoundPool;
 import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
@@ -12,14 +14,17 @@ import com.example.retrogames.R;
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
+import com.example.retrogames.gameUtilities.Constants;
 
 public class BreakoutMainActivity extends Activity {
 
     private User user;
     public UserDAO userDAO;
     private String username;
+    private SoundPool soundPool;
     private BreakoutGame game;
-
+    private int blocHitSound;
+    private int gameOverSound;
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -39,7 +44,19 @@ public class BreakoutMainActivity extends Activity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN
         );
-        
+
+        AudioAttributes audioAttributes = new AudioAttributes.Builder()
+                .setUsage(AudioAttributes.USAGE_GAME)
+                .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                .build();
+        soundPool = new SoundPool.Builder()
+                .setMaxStreams(1)
+                .setAudioAttributes(audioAttributes)
+                .build();
+
+        blocHitSound = soundPool.load(this, R.raw.blockhit, 1);
+        gameOverSound = soundPool.load(this, R.raw.gameover, 1);
+
         game = new BreakoutGame(this, this);
         setContentView(game);
     }
@@ -78,5 +95,26 @@ public class BreakoutMainActivity extends Activity {
             user.setBreakout_high_score(game.getScore());
             userDAO.updateUser(user);
         }
+    }
+
+    public void playSound(int i) {
+        int sound = -1;
+        switch (i) {
+            case Constants.BLOCK_HIT_SOUND:
+                sound = blocHitSound;
+                break;
+            case Constants.GAME_OVER_SOUND:
+                sound = gameOverSound;
+                break;
+        }
+        if(sound != -1)
+            soundPool.play(sound,0.1f, 0.1f, 0, 0, 1);
+    }
+
+    @Override
+    protected void onDestroy() {
+        soundPool.release();
+        soundPool = null;
+        super.onDestroy();
     }
 }

@@ -137,7 +137,7 @@ public class Snake {
 
         if(positionY < playingFieldY)
             positionY = playingFieldY + playingFieldHeight - size;
-        else if (positionY > playingFieldY + playingFieldHeight)
+        else if (positionY >= playingFieldY + playingFieldHeight)
             positionY = playingFieldY;
 
         if(positionX == fruit.left && positionY == fruit.top)

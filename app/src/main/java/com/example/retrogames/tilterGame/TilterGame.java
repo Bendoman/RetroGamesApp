@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
+import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -46,8 +47,6 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
 
         gameLoop = new GameLoop(this, surfaceHolder, 60);
         score = 0;
-
-
 
         setFocusable(true);
     }
@@ -91,6 +90,7 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
 
     @Override
     public void initObjects(Canvas canvas) {
+        main.playSound(Constants.GAME_START_SOUND);
         playingField = new TilterPlayingField(canvas);
         ball = new TilterBall(getContext(), this,  canvas.getWidth()/2,
                 canvas.getHeight()/2, 30, 60, playingField);
@@ -135,7 +135,9 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
 
     @Override
     public void gameOver() {
+
         isRunning = false;
+        main.playSound(Constants.GAME_OVER_SOUND);
     }
 
     @Override
@@ -148,6 +150,7 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
             level++;
             ball.reduceFieldSize();
         }
+        main.playSound(Constants.SUCCESS_SOUND);
     }
     @Override
     public double getScore() { return score; }
