@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -40,6 +41,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
     public SnakeGame(Context context, SnakeMainActivity main) {
         super(context);
         this.main = main;
+
         // Get surface holder and callback
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
@@ -78,23 +80,26 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
                 float deltaX = x1 - x2;
                 float deltaY = y1 - y2;
 
+                // Only checking swipe gestures if they start within the playing field.
                 // Interfacing with the JoyPad buttons so that there the same safeguard logic for
                 // direction is still in play, and so that there is visual feedback on the JoyPad
                 // of direction.
-                if (Math.abs(deltaX) > MIN_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY))
+                if(x1 > playingField.positionX && x1 < playingField.positionX + playingField.playingFieldWidth &&
+                    y1 > playingField.positionY && y1 < playingField.positionY + playingField.playingFieldHeight)
                 {
-                    if(x2 < x1)
-                        joypad.calculateDirection(joypad.leftArrow.left + 1, joypad.leftArrow.top + 1);
-                    else
-                        joypad.calculateDirection(joypad.rightArrow.left + 1, joypad.rightArrow.top + 1);
+                    if (Math.abs(deltaX) > MIN_DISTANCE && Math.abs(deltaX) > Math.abs(deltaY)) {
+                        if (x2 < x1)
+                            joypad.calculateDirection(joypad.leftArrow.left + 1, joypad.leftArrow.top + 1);
+                        else
+                            joypad.calculateDirection(joypad.rightArrow.left + 1, joypad.rightArrow.top + 1);
+                    } else if (Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(deltaX)) {
+                        if (y2 < y1)
+                            joypad.calculateDirection(joypad.upArrow.left + 1, joypad.upArrow.top + 1);
+                        else
+                            joypad.calculateDirection(joypad.downArrow.left + 1, joypad.downArrow.top + 1);
+                    }
                 }
-                else if(Math.abs(deltaY) > MIN_DISTANCE && Math.abs(deltaY) > Math.abs(deltaX))
-                {
-                    if(y2 < y1)
-                        joypad.calculateDirection(joypad.upArrow.left + 1, joypad.upArrow.top + 1);
-                    else
-                        joypad.calculateDirection(joypad.downArrow.left + 1, joypad.downArrow.top + 1);
-                }
+
                 return true;
         }
 
