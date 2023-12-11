@@ -31,23 +31,22 @@ import com.example.retrogames.tilterGame.TilterMainActivity;
 public class GameInfo extends AppCompatActivity
 {
     // For detecting swipe gesture
-    private float x1,x2;
+    private float x1;
     static final int MIN_DISTANCE = 150;
 
     TextView globalHighScoreTextView;
     TextView userHighScoreTextView;
 
     String user_name;
-    private User user;
     public UserDAO userDAO;
 
-    // TODO remove this from here and have it passed dynamically
-    private Integer images[] = { drawable.snake, drawable.breakout, drawable.tilter, drawable.pong};
     private String gameName;
-    private String globalHighScore;
     private String userHighScore;
+    private String globalHighScore;
     private TextView lastScoreTextView;
+    private final Integer[] images = { drawable.snake, drawable.breakout, drawable.tilter, drawable.pong};
 
+    // Takes the result from finished game activities and updates the last score field based on it
     ActivityResultLauncher<Intent> activityResultLauncher =
             registerForActivityResult(
                     new ActivityResultContracts.StartActivityForResult(),
@@ -80,7 +79,6 @@ public class GameInfo extends AppCompatActivity
         userDAO = Room.databaseBuilder(this, UserDatabase.class, "user-database")
                 .allowMainThreadQueries().build().getUserDAO();
 
-
         // Get views from layout
         TextView gameNameView = (TextView) findViewById(id.gameNameField);
         ImageView imageView = (ImageView) findViewById(id.gameImageView);
@@ -93,8 +91,6 @@ public class GameInfo extends AppCompatActivity
         Bundle b = getIntent().getExtras();
         int imageID = b.getInt("image");
         gameName = b.getString("game");
-        String globalHighScore = b.getString("globalHighScore");
-        String userHighScore = b.getString("userHighScore");
         user_name = b.getString("user_name");
 
         // Set values to views
@@ -109,7 +105,7 @@ public class GameInfo extends AppCompatActivity
         Button playGame = (Button) findViewById(id.playGame);
         playGame.setOnClickListener(new View.OnClickListener()
         {
-            // TODO Make this button start any of the game activities that are pressed not just snake
+            // Detects clicks on each game tile and passes the name of the current user
             @Override
             public void onClick(View view)
             {
@@ -139,13 +135,14 @@ public class GameInfo extends AppCompatActivity
             }
         });
 
+        // Finishes the activity on pressing the return button
         Button backToMenu = (Button) findViewById(id.backToMenu);
         backToMenu.setOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View view) { finish(); }
         });
-
     }
 
+    // Swipe gesture to return to the previous activity
     @Override
     public boolean onTouchEvent(MotionEvent event)
     {
@@ -155,16 +152,20 @@ public class GameInfo extends AppCompatActivity
                 x1 = event.getX();
                 break;
             case MotionEvent.ACTION_UP:
-                x2 = event.getX();
+                float x2 = event.getX();
                 float deltaX = x1 - x2;
-                if (Math.abs(deltaX) > MIN_DISTANCE && x2 < x1 )
-                    this.onBackPressed();
+                if (Math.abs(deltaX) > MIN_DISTANCE && x2 > x1 )
+                    finish();
                 break;
         }
         return super.onTouchEvent(event);
     }
-    private void loadScores() {
-        user = userDAO.getUserByName(user_name);
+
+    // Access the room database and updates the global and
+    // personal high score fields based on the username
+    private void loadScores()
+    {
+        User user = userDAO.getUserByName(user_name);
         switch(gameName) {
             case "Snake":
                 globalHighScore = Double.toString(userDAO.getGlobalSnakeHighScore());
@@ -188,22 +189,8 @@ public class GameInfo extends AppCompatActivity
     }
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        if(resultCode == 1) {
-            String lastScore = String.valueOf(data.getDoubleExtra("score", 0));
-            lastScoreTextView.setText(lastScore);
-        }
-
-
-        loadScores();
-    }
-
-    @Override
     protected void onResume() {
         super.onResume();
         loadScores();
     }
 }
-

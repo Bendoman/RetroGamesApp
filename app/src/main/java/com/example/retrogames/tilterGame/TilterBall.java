@@ -4,33 +4,33 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Rect;
-import android.hardware.SensorEvent;
-import android.util.Log;
 
 import com.example.retrogames.gameUtilities.BouncingBall;
 import com.example.retrogames.gameUtilities.GameClass;
-import com.example.retrogames.gameUtilities.GameObject;
 
-import java.util.List;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
-public class TilterBall extends BouncingBall {
-
-    private final int playingFieldWidth;
-    private final int playingFieldHeight;
-    private TilterPlayingField playingField;
-    private Rect fruit;
-    private int fruitRadius = 20;
+public class TilterBall extends BouncingBall
+{
     private int fruitPositionX;
     private int fruitPositionY;
+    private final int fruitRadius = 20;
+    private final int playingFieldWidth;
+    private final int playingFieldHeight;
+    private final TilterPlayingField playingField;
 
+    // Using the second BouncingBall constructor that doesn't require a gameObjects list
     public TilterBall(Context context, GameClass game, double positionX, double positionY,
                       int radius, double maxUPS, TilterPlayingField playingField) {
         super(context, game, positionX, positionY, radius, maxUPS);
+
+        // Appending to the default bouncing ball constructor as the tilter game has a PlayingField
+        // that determines the update logic of the ball
         this.playingField = playingField;
         playingFieldWidth = playingField.playingFieldWidth;
         playingFieldHeight = playingField.playingFieldHeight;
+
+        // Adds the first fruit to the game
         addFruit();
     }
 
@@ -39,9 +39,11 @@ public class TilterBall extends BouncingBall {
         if(canvasWidth == 0)
             return;
 
-        positionX += (xAcceleration*1.5);
-        positionY += (yAcceleration*1.5);
+        // Updates the balls position based on the acceleration of the devices gyroscopes
+        positionX += (xAcceleration*1.15);
+        positionY += (yAcceleration*1.15);
 
+        // Ends the game if the ball leaves the bounds of the playing field
         if(positionX < playingField.positionX - radius)
             game.gameOver();
         else if(positionX > playingField.positionX + playingFieldWidth + radius)
@@ -52,6 +54,7 @@ public class TilterBall extends BouncingBall {
         else if(positionY > playingField.positionY + playingFieldHeight + radius)
             game.gameOver();
 
+        // If the ball collides with the fruit objective then re-create the fruit and add score
         if(circleCollision((float) positionX, (float) positionY, radius, fruitPositionX, fruitPositionY, fruitRadius)) {
             addFruit();
             game.addScore(1);
@@ -59,15 +62,21 @@ public class TilterBall extends BouncingBall {
     }
 
     @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas)
+    {
         super.draw(canvas);
-        if(fruitPositionX != 0 && fruitPositionY != 0) {
+        // The add fruit method uses the canvasWidth and height
+        // properties which are null when the object is first created
+        if(fruitPositionX != 0 && fruitPositionY != 0)
+        {
             paint.setColor(Color.rgb(200, 10, 105));
-            canvas.drawCircle(fruitPositionX, fruitPositionY, 20, paint);
+            canvas.drawCircle(fruitPositionX, fruitPositionY, fruitRadius, paint);
         }
     }
 
-    private void addFruit() {
+    // Determines a valid position to generate a fruit within the playing field boundaries
+    private void addFruit()
+    {
         int min, max;
         min = playingField.positionX + radius;
         max = playingFieldWidth - radius;
@@ -78,6 +87,7 @@ public class TilterBall extends BouncingBall {
         fruitPositionY = ThreadLocalRandom.current().nextInt(min, max + 1);
     }
 
+    // Standard circle collision math
     private boolean circleCollision(float x1, float y1, float r1, float x2, float y2, float r2)
     {
         // get distance between the circle's centers

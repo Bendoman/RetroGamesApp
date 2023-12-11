@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
@@ -13,48 +12,39 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintSet;
 import androidx.room.Room;
 
 import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.UserDatabase;
 import com.example.retrogames.database.entities.User;
 
+/**
+ * Class displaying list of available games and the user high scores associate with them.
+ *
+ */
 public class GamesListActivity extends AppCompatActivity
 {
-    private TextView header;
-    private ListView listView;
-
-    private String username;
-    public String getUsername() {
-        return this.username;
-    }
-
     private User user;
     public UserDAO userDAO;
-    private String userHighScoreStrings[] = { " ", " ", " ", " " };
-    private String globalHighScoreStrings[] = { " ", " ", " ", " " };
-    private String gameNames[] = { "Snake", "Breakout", "Tilter", "Pong" };
-    private Integer images[] = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
 
-    public double snakeHighScore;
-    public double breakoutHighScore;
-    public double tilterHighScore;
-    public double pongHighScore;
+    private String username;
+    private ListView listView;
+    private final String[] userHighScoreStrings = { " ", " ", " ", " " };
+    private final String[] gameNames = { "Snake", "Breakout", "Tilter", "Pong" };
+    private final Integer[] images = { R.drawable.snake, R.drawable.breakout, R.drawable.tilter, R.drawable.pong};
 
     // For detecting swipe gesture
-    private float x1,x2;
+    private float x1;
     static final int MIN_DISTANCE = 150;
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.list_activity);
         Window window = getWindow();
         window.setFlags(
@@ -69,38 +59,44 @@ public class GamesListActivity extends AppCompatActivity
         Intent intent = getIntent();
         username = intent.getExtras().getString("username");
 
-        // Setting header
-        header = new TextView(this);
-        header.setTextSize(20);
-        header.setGravity(Gravity.CENTER);
-        header.setText("USERNAME: " + username.toUpperCase());
-        header.setTextColor(Color.WHITE);
-        header.setTypeface(Typeface.DEFAULT_BOLD);
-        header.setPadding(35, 35, 35, 35);
-        header.setBackgroundColor(Color.parseColor("#DE004E"));
-
         // Initializing list View
         listView = (ListView) findViewById(R.id.games_list);
+
+        // Setting header
+        TextView header = new TextView(this);
+        header.setTextSize(20);
+        header.setTextColor(Color.WHITE);
+        header.setGravity(Gravity.CENTER);
+        header.setTypeface(Typeface.DEFAULT_BOLD);
+        header.setText("USERNAME: " + username.toUpperCase());
+        header.setPadding(35, 35, 35, 35);
+        header.setBackgroundColor(Color.parseColor("#DE004E"));
         listView.addHeaderView(header);
 
+        // Setting footer
         Button footerButton = new Button(this);
         footerButton.setTextSize(20);
         footerButton.setText("RETURN");
         footerButton.setTextColor(Color.WHITE);
-        footerButton.setBackgroundColor(Color.parseColor("#DE004E"));
         footerButton.setTypeface(Typeface.DEFAULT_BOLD);
+        footerButton.setBackgroundColor(Color.parseColor("#DE004E"));
         listView.addFooterView(footerButton);
 
         user = userDAO.getUserByName(username);
         loadList();
 
+        // Finishes the activity on footer return button click
         footerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 finish();
             }
         });
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+        // When a list item is clicked launch the game associated with that item
+        // and pass the game name string, username and image id as extras
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener()
+        {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
 
@@ -113,29 +109,19 @@ public class GamesListActivity extends AppCompatActivity
                 b.putInt("image", i - 1);
                 b.putString("game", game);
                 b.putString("user_name", activity.username);
-                b.putString("globalHighScore", activity.globalHighScoreStrings[i - 1]);
-                b.putString("userHighScore", activity.userHighScoreStrings[i - 1]);
 
                 intent.putExtras(b);
                 startActivity(intent);
             }
         });
     }
+
+    // Reloads the scores list on resume so it gets updated after returning from a game
     @Override
-    protected void onResume()
-    {
-        super.onResume();
-        loadList();
-    }
+    protected void onResume() { super.onResume(); loadList(); }
 
     private void populateScoreData()
     {
-        // Populating global score data
-        globalHighScoreStrings[0] = Double.toString(userDAO.getGlobalSnakeHighScore());
-        globalHighScoreStrings[1] = Double.toString(userDAO.getGlobalBreakoutHighScore());
-        globalHighScoreStrings[2] = Double.toString(userDAO.getGlobalTilterHighScore());
-        globalHighScoreStrings[3] = Double.toString(userDAO.getGlobalPongHighScore());
-
         // Populating user score data
         user = userDAO.getUserByName(username);
         userHighScoreStrings[0] = Double.toString(user.getSnake_high_score());
@@ -144,6 +130,7 @@ public class GamesListActivity extends AppCompatActivity
         userHighScoreStrings[3] = Double.toString(user.getPong_high_score());
     }
 
+    // Updates the user high score values and recreates the listView adapter
     private void loadList()
     {
         populateScoreData();
@@ -161,7 +148,7 @@ public class GamesListActivity extends AppCompatActivity
                 x1 = event.getX();
                 break;
             case MotionEvent.ACTION_UP:
-                x2 = event.getX();
+                float x2 = event.getX();
                 float deltaX = x1 - x2;
                 if (Math.abs(deltaX) > MIN_DISTANCE && x2 < x1 )
                     this.onBackPressed();
@@ -170,4 +157,3 @@ public class GamesListActivity extends AppCompatActivity
         return super.onTouchEvent(event);
     }
 }
-

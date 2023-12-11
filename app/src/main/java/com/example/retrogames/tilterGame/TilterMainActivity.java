@@ -37,6 +37,8 @@ public class TilterMainActivity extends GameMainActivity implements SensorEventL
     }
 
     // Takes the change in Gyroscope values and updates the acceleration values in the game
+    // Implements the sensor listening logic here as the getSystemService
+    // call used in the constructor is unavailable to non activity classes
     @Override
     public void onSensorChanged(SensorEvent event)
     {
@@ -64,8 +66,9 @@ public class TilterMainActivity extends GameMainActivity implements SensorEventL
     protected void onResume()
     {
         super.onResume();
-
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
+        sensorManager.registerListener(this,
+                sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE),
+                SensorManager.SENSOR_DELAY_GAME);
     }
 
     // Unused but implemented from interface

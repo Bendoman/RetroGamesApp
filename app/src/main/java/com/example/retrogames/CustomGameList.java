@@ -1,5 +1,6 @@
 package com.example.retrogames;
 
+import android.annotation.SuppressLint;
 import android.view.View;
 import android.app.Activity;
 import android.view.ViewGroup;
@@ -8,24 +9,31 @@ import android.widget.ImageView;
 import android.view.LayoutInflater;
 import android.widget.ArrayAdapter;
 
+import androidx.annotation.NonNull;
+
 public class CustomGameList extends ArrayAdapter
 {
-    private String[] gameNames;
-    private String[] highScoreStrings;
-    private Integer[] images;
-    private Activity context;
+    private final Integer[] images;
+    private final String[] gameNames;
+    private final String[] highScoreStrings;
+
+    private final Activity context;
 
     public CustomGameList(Activity context, String[] gameNames, String[] highScoreStrings, Integer[] images)
     {
         super(context, R.layout.row_item, gameNames);
+
+        this.images = images;
         this.context = context;
         this.gameNames = gameNames;
         this.highScoreStrings = highScoreStrings;
-        this.images = images;
     }
 
+
+    @NonNull
     @Override
-    public View getView(int position, View convertView, ViewGroup parent)
+    @SuppressLint("InflateParams")
+    public View getView(int position, View convertView, @NonNull ViewGroup parent)
     {
         View row = convertView;
         LayoutInflater inflater = context.getLayoutInflater();

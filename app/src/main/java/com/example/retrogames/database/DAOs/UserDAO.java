@@ -14,21 +14,17 @@ import java.util.List;
 @Dao
 public interface UserDAO
 {
-    @Insert
-    public void insertUser(User user);
-
-    @Update
-    public void updateUser(User user);
-
+    // User queries
     @Delete
     public void deleteUser(User user);
-
+    @Insert
+    public void insertUser(User user);
+    @Update
+    public void updateUser(User user);
     @Query("Select * FROM User")
     public List<User> loadAllUsers();
-
     @Query("Select * FROM User WHERE user_name = :name")
     public User getUserByName(String name);
-
 
     // Global high scores
     @Query("Select MAX(snake_high_score) FROM User")

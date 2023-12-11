@@ -1,6 +1,7 @@
 package com.example.retrogames.snakeGame;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -19,24 +20,28 @@ import com.example.retrogames.gameUtilities.GameObject;
 import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.Joypad;
 
-public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, GameClass {
+@SuppressLint("ViewConstructor")
+public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
+{
+    // The minimum distance for a swipe gesture to be registered
     private static final float MIN_DISTANCE = 15;
-    private final SnakeMainActivity main;
-    private int score;
-    private GameLoop gameLoop;
-    private Snake snake;
-    private Joypad joypad;
-    private SnakePlayingField playingField;
-    private int level = 1;
+    // Used for detecting the length of a swipe gesture
     private float x1;
     private float y1;
-    private float x2;
-    private float y2;
 
+    private Snake snake;
+    private Joypad joypad;
+    private GameOver gameOverText;
+    private final GameLoop gameLoop;
+    private final SnakeMainActivity main;
+    private SnakePlayingField playingField;
+
+    private int score = 0;
+    private int level = 1;
     public boolean isRunning = true;
-    public GameOver gameOverText;
 
-    public SnakeGame(Context context, SnakeMainActivity main) {
+    public SnakeGame(Context context, SnakeMainActivity main)
+    {
         super(context);
         this.main = main;
 
@@ -44,27 +49,44 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
+        // Instantiates the game loop
         gameLoop = new GameLoop(this, surfaceHolder, 4);
-        score = 0;
-
         setFocusable(true);
     }
 
+    // Initialize game objects
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
-        // Handle touch event actions
+    public void initObjects(Canvas canvas)
+    {
+        int snakeSize = 50;
+        playingField = new SnakePlayingField(canvas, snakeSize);
+        snake = new Snake(getContext(),this, playingField, snakeSize);
+
+        gameOverText = new GameOver(canvas, getContext());
+        joypad = new Joypad(canvas.getWidth()/2f - 50, canvas.getHeight() - 250);
+    }
+
+    @Override
+    public boolean onTouchEvent(MotionEvent event)
+    {
+        // Handles touch and gesture actions
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
+                // Passes the current x and y coordinates of the mouse, the JoyPad will calculate if
+                // they intersect any of the control surfaces and Update the direction accordingly
                 joypad.calculateDirection((double) event.getX(), (double) event.getY());
+
                 // For detecting swipe gesture
                 x1 = event.getX();
                 y1 = event.getY();
                 return true;
             case MotionEvent.ACTION_UP:
                 // Dealing with swipe gesture
-                x2 = event.getX();
-                y2 = event.getY();
+                float x2 = event.getX();
+                float y2 = event.getY();
 
+                // If the game is over this code will allow the
+                // user to press the menu buttons that appear
                 if (!isRunning)
                 {
                     GameOver g = gameOverText;
@@ -81,7 +103,7 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
                 // Only checking swipe gestures if they start within the playing field.
                 // Interfacing with the JoyPad buttons so that there the same safeguard logic for
                 // direction is still in play, and so that there is visual feedback on the JoyPad
-                // of direction.
+                // of the direction the snake is moving.
                 if(x1 > playingField.positionX && x1 < playingField.positionX + playingField.playingFieldWidth &&
                     y1 > playingField.positionY && y1 < playingField.positionY + playingField.playingFieldHeight)
                 {
@@ -97,86 +119,77 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
                             joypad.calculateDirection(joypad.downArrow.left + 1, joypad.downArrow.top + 1);
                     }
                 }
-
                 return true;
         }
-
         return super.onTouchEvent(event);
     }
 
+    // Starts the GameLoop when the surface is created
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) { Log.d(".java", "loop started()"); gameLoop.startLoop(); }
 
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
 
+    // Ends the game if the surface is destroyed to avoid crashes
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) { endGame(); }
 
+    @Override
+    public void update(Canvas canvas) { snake.update(joypad); }
 
     @Override
-    public void initObjects(Canvas canvas) {
-        playingField = new SnakePlayingField(canvas);
-
-        snake = new Snake(getContext(), canvas, this, playingField, 50);
-        joypad = new Joypad(canvas.getWidth()/2 - 50, canvas.getHeight() - 250);
-
-        gameOverText = new GameOver(canvas, getContext());
-    }
-
-    @Override
-    public void update(Canvas canvas) {
-        joypad.update();
-        snake.update(joypad);
-    }
-
-    @Override
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas)
+    {
         super.draw(canvas);
-        joypad.draw(canvas);
-        snake.draw(canvas);
-        playingField.draw(canvas);
+
         drawScore(canvas);
-        if(!isRunning)
-        {
+        snake.draw(canvas);
+        joypad.draw(canvas);
+        playingField.draw(canvas);
+
+        if(!isRunning) {
+            // Draws the game over menu if the game has stopped
             gameOverText.draw(canvas);
-            endGame();
+            endGame(); // Ends the game loop
         }
     }
 
-    @Override
-    public void endGame() {
-        // Stop updating the game
-        gameLoop.endLoop();
+    // Draws the game score and level values
+    public void drawScore(Canvas canvas)
+    {
+        Paint paint = new Paint();
+        String score = Integer.toString(this.score);
+        String level = Integer.toString(this.level);
+
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.deep_magenta));
+        paint.setTextSize(40);
+        canvas.drawText("SCORE: " + score, (canvas.getWidth()/2f + 200), canvas.getHeight() - 115, paint);
+        canvas.drawText("LEVEL: " + level, (canvas.getWidth()/2f + 200), canvas.getHeight() - 45, paint);
     }
+
+    // Stop updating the game
+    @Override
+    public void endGame() { gameLoop.endLoop(); }
 
     @Override
     public void gameOver() {
         isRunning = false;
     }
 
-    @Override
-    public void removeObject(GameObject rect) { }
-
+    // Adds the passed score and increases the speed of the game every five levels
     @Override
     public void addScore(int i) {
         score += i;
         if(gameLoop.maxUPS < 10 && score % 5 == 0) {
             gameLoop.setUPS(gameLoop.maxUPS + 0.5);
-            level++; 
+            level++;
         }
     }
+
     @Override
     public double getScore() { return score; }
 
-    public void drawScore(Canvas canvas) {
-        String score = Integer.toString(this.score);
-        String level = Integer.toString(this.level);
-        Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.deep_magenta);
-        paint.setColor(color);
-        paint.setTextSize(40);
-        canvas.drawText("SCORE: " + score, (canvas.getWidth()/2 + 200), canvas.getHeight() - 115, paint);
-        canvas.drawText("LEVEL: " + level, (canvas.getWidth()/2 + 200), canvas.getHeight() - 45, paint);
-    }
+    @Override
+    public void removeObject(GameObject rect) {}
 }

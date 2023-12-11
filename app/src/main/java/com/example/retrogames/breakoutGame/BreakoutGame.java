@@ -1,5 +1,6 @@
 package com.example.retrogames.breakoutGame;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -21,23 +22,24 @@ import com.example.retrogames.gameUtilities.MovablePaddle;
 import java.util.ArrayList;
 import java.util.List;
 
-//Manages all objects in the game
-public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback, GameClass {
+@SuppressLint("ViewConstructor")
+public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
+{
     private static final int MAX_BRICK_LAYERS = 10;
 
     private BreakoutBall ball;
-    private GameLoop gameLoop;
     private Joystick joystick;
     private MovablePaddle player;
-    public GameOver gameOverText;
-    List<GameObject> gameObjects;
-    private BreakoutMainActivity main;
+    private GameOver gameOverText;
+    private List<GameObject> gameObjects;
+
+    private final GameLoop gameLoop;
+    private final BreakoutMainActivity main;
 
     private int score = 0;
     private int level = 1;
     private int brickLayers = 1;
     private boolean isRunning = true;
-    private final int firstBrickLayerY = 10;
 
     public BreakoutGame(Context context, BreakoutMainActivity main)
     {
@@ -48,6 +50,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         SurfaceHolder surfaceHolder = getHolder();
         surfaceHolder.addCallback(this);
 
+        // Instantiates the game loop
         gameLoop = new GameLoop(this, surfaceHolder, 60);
         setFocusable(true);
     }
@@ -73,6 +76,7 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         {
             for(int i = 0; i < canvas.getWidth(); i+=110)
             {
+                int firstBrickLayerY = 10;
                 BreakoutBrick brick = new BreakoutBrick(getContext(), i, firstBrickLayerY + (x * 60), 100, 50);
                 gameObjects.add(brick);
             }
@@ -83,14 +87,15 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     public boolean onTouchEvent(MotionEvent event)
     {
         // Handle touch event actions
-        switch(event.getAction()){
+        switch(event.getAction())
+        {
             case MotionEvent.ACTION_DOWN:
                 // Checks if the user clicked on the joystick
                 if(joystick.isPressed(event.getX(), event.getY()))
                     joystick.setIsPressed(true);
                 return true;
             case MotionEvent.ACTION_MOVE:
-                // Adjusts the joystick actuator positions based on the current moust position
+                // Adjusts the joystick actuator positions based on the current mouse position
                 if(joystick.getIsPressed())
                     joystick.setActuator(event.getX(), event.getY());
                 return true;
@@ -116,17 +121,19 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         return super.onTouchEvent(event);
     }
 
-    // Ends the game if the surface is destroyed to avoid crashes
+    // Starts the GameLoop when the surface is created
     @Override
     public void surfaceDestroyed(@NonNull SurfaceHolder holder) { endGame(); }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) { gameLoop.startLoop(); }
 
+    // Ends the game if the surface is destroyed to avoid crashes
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
 
     // Updates the position and other values of all game elements. Called by the gameLoop.
+    @Override
     public void update(Canvas canvas) {
         joystick.update();
         player.update(joystick);
@@ -153,9 +160,9 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     public void draw(Canvas canvas) {
         super.draw(canvas);
 
-        drawScore(canvas);
         joystick.draw(canvas);
         ball.draw(canvas);
+        drawScore(canvas);
 
         // Draws each item in the gameObjects list
         for(int i = 0; i < gameObjects.size(); i++)
@@ -169,7 +176,8 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     }
 
     // Draws the game score and level values
-    public void drawScore(Canvas canvas) {
+    public void drawScore(Canvas canvas)
+    {
         Paint paint = new Paint();
         String score = Integer.toString(this.score);
         String level = Integer.toString(this.level);

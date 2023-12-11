@@ -16,65 +16,61 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
-public class Snake {
+public class Snake
+{
+    private final Paint paint;
+    private final GameClass game;
 
-    private int min;
-    private int max;
-    private int speed = 5;
     private int positionX;
     private int positionY;
-    private GameClass game;
-    private int size;
+    private final int size;
 
-    private Paint paint;
-    private int canvasWidth;
-    private int canvasHeight;
-    private int direction;
 
-    private SnakePlayingField playingField;
-    private int playingFieldX;
-    private int playingFieldY;
-    private int playingFieldWidth;
-    private int playingFieldHeight;
+    private final int playingFieldX;
+    private final int playingFieldY;
+    private final int playingFieldWidth;
+    private final int playingFieldHeight;
 
-    private List<Rect> snakeBody = new ArrayList<Rect>();
     private Rect fruit;
-    private boolean validCoordinates;
+    private final List<Rect> snakeBody = new ArrayList<Rect>();
 
-    public Snake(Context context, Canvas canvas, GameClass game, SnakePlayingField playingField, int size) {
+    public Snake(Context context, GameClass game, SnakePlayingField playingField, int size)
+    {
         this.game = game;
         this.size = size;
-        this.playingField = playingField;
+
+        // Taking the size parameters from the playingField but not the field itself as the
+        // draw method is not called from within the snake class, but the game class
         this.playingFieldX = playingField.positionX;
         this.playingFieldY = playingField.positionY;
         this.playingFieldWidth = playingField.playingFieldWidth;
         this.playingFieldHeight = playingField.playingFieldHeight;
 
+        // Calculates random valid x and y coordinates that conform to an even grid
+        // within the playingField as a starting position for the snake
         int randomXPosition = new Random().nextInt((int) (playingFieldWidth - size) / size);
         int randomYPosition = new Random().nextInt((int) (playingFieldHeight - size) / size);
-        positionX = (size * randomXPosition) + 50;
-        positionY = (size * randomXPosition) + 50;
+        positionX = (size * randomXPosition) + size;
+        positionY = (size * randomYPosition) + size;
 
+        // Populates the snakeBody array with the first segment
         snakeBody.add(new Rect(positionX, positionY - size, positionX + size, positionY));
+        // Adds the first fruit to the game
         addFruit();
 
         paint = new Paint();
-        int color = ContextCompat.getColor(context, R.color.player);
-        paint.setColor(color);
         paint.setStyle(Paint.Style.FILL);
+        paint.setColor(ContextCompat.getColor(context, R.color.player));
     }
 
     private void addFruit() {
         while(true) {
-            validCoordinates = false;
             int randomXPosition = new Random().nextInt((int) (playingFieldWidth - size) / size);
             int randomYPosition = new Random().nextInt((int) (playingFieldHeight - size) / size);
-            int fruitPositionX = (size * randomXPosition) + 50;
-            int fruitPositionY = (size * randomYPosition) + 50;
+            int fruitPositionX = (size * randomXPosition) + size;
+            int fruitPositionY = (size * randomYPosition) + size;
 
-            if (fruitPositionX == positionX && fruitPositionY == positionY)
-                validCoordinates = false;
-
+            boolean validCoordinates = false;
             for (int i = 0; i < snakeBody.size(); i++) {
                 validCoordinates = true;
                 if (fruitPositionX == snakeBody.get(i).left && fruitPositionY == snakeBody.get(i).top) {
@@ -84,29 +80,36 @@ public class Snake {
             }
 
             if(validCoordinates) {
-                fruit = (new Rect(fruitPositionX, fruitPositionY, fruitPositionX + size, fruitPositionY + size));
+                fruit = (new Rect(fruitPositionX, fruitPositionY,
+                        fruitPositionX + size, fruitPositionY + size));
                 break;
             }
         }
     }
 
+    // Adds a snake segment to the end of the snake
     private void addSegment() {
         Rect tail = snakeBody.get(snakeBody.size() - 1);
         snakeBody.add(new Rect(tail.left, tail.top, tail.right, tail.bottom));
     }
 
-    public void update(Joypad joypad) {
-        direction = joypad.getDirection();
+    // Updates the position of the head and each segment in the tail
+    public void update(Joypad joypad)
+    {
+        int direction = joypad.getDirection();
+        // Loops from the end of the list down to the start in order to
+        // cascade the positions before the head is updated
         for(int i = snakeBody.size() - 1; i >= 0; i--) {
-            if(i == 0)
+            if(i == 0) // The head of the snake
             {
                 snakeBody.get(i).left = positionX;
                 snakeBody.get(i).top = positionY;
                 snakeBody.get(i).right = positionX + size;
                 snakeBody.get(i).bottom = positionY + size;
             }
-            else
+            else // The rest of the body
             {
+                // Sets each segment to the position of the previous segment in the list
                 snakeBody.get(i).top = snakeBody.get(i - 1).top;
                 snakeBody.get(i).bottom = snakeBody.get(i - 1).bottom;
 
@@ -115,6 +118,7 @@ public class Snake {
             }
         }
 
+        // Updates the position of the head of the snake based on the direction
         switch (direction) {
             case 0:
                 positionY -= size;
@@ -130,6 +134,7 @@ public class Snake {
                 break;
         }
 
+        // Handles screen wrapping
         if(positionX < playingFieldX)
             positionX = playingFieldX + playingFieldWidth - size;
         else if (positionX >= playingFieldX + playingFieldWidth)
@@ -140,6 +145,8 @@ public class Snake {
         else if (positionY >= playingFieldY + playingFieldHeight)
             positionY = playingFieldY;
 
+        // Re-creates the fruit, adds a segment and updates
+        // the score when the head intersects a fruit
         if(positionX == fruit.left && positionY == fruit.top)
         {
             addSegment();
@@ -147,6 +154,7 @@ public class Snake {
             game.addScore(1);
         }
 
+        // If the head of the snake collides with any of the elements in the body the game is over
         for(int i = 0; i < snakeBody.size(); i++)
         {
             if(positionX == snakeBody.get(i).left && positionY == snakeBody.get(i).top)
@@ -154,7 +162,8 @@ public class Snake {
         }
     }
 
-    public void draw(Canvas canvas) {
+    public void draw(Canvas canvas)
+    {
         // Draws each rectangle stored in the snake body arraylist
         for(int i = 0; i < snakeBody.size(); i++)
         {

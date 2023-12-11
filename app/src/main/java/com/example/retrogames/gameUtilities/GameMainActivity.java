@@ -66,5 +66,4 @@ public class GameMainActivity extends Activity {
 
     // Updates the database
     public void updateScores() {} // Left empty and will be overridden
-
 }

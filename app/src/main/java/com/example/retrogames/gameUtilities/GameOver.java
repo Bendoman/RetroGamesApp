@@ -11,32 +11,31 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 
-public class GameOver {
+public class GameOver
+{
+    // Menu box paints
     private final Paint paint;
-    public final float retryTop;
-    public final float retryBottom;
-    public final float backTop;
-    public final float backBottom;
     private final Paint rectPaint;
-    private final float mainLeft;
-    private final float mainRight;
-    private final float mainTop;
-    private final float mainBottom;
-    private Paint backgroundPaint;
-    private int mainWidth;
-    public float backLeft;
-    public float backRight;
-    public float retryLeft;
-    public float retryRight;
+    private final Paint backgroundPaint;
 
-    public int retryHeight;
-    public int retryWidth;
-    public int backWidth;
-    public int backHeight;
-    public int retryX;
-    public int retryY;
+    public final float mainTop;
+    public final float mainLeft;
+    public final float mainRight;
+    public final float mainBottom;
+
     public int backX;
     public int backY;
+    public final float backTop;
+    public final float backLeft;
+    public final float backRight;
+    public final float backBottom;
+
+    public int retryX;
+    public int retryY;
+    public final float retryTop;
+    public final float retryLeft;
+    public final float retryRight;
+    public final float retryBottom;
 
     public int positionX;
     public int positionY;
@@ -44,42 +43,42 @@ public class GameOver {
     private final String retryText = "TRY AGAIN";
     private final String backText = "BACK TO MENU";
 
-    public GameOver(Canvas canvas, Context context) {
+    public GameOver(Canvas canvas, Context context)
+    {
         paint = new Paint();
         paint.setTextAlign(Paint.Align.CENTER);
         paint.setColor(ContextCompat.getColor(context, R.color.white));
         paint.setTypeface(Typeface.create(Typeface.DEFAULT, Typeface.BOLD));
 
-
+        // Sets the main game over container X and Y to be the center of the screen
         this.positionX = (canvas.getWidth() / 2);
         this.positionY = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
 
+        // Sets the Rect values of the main container based on the text size and width
         paint.setTextSize(75);
-        mainWidth = (int) paint.measureText(retryText);
-        this.mainLeft = positionX - (mainWidth/2) - 50;
-        this.mainRight = (positionX - (mainWidth/2)) + mainWidth + 50;
+        int mainWidth = (int) paint.measureText(retryText);
         this.mainTop = positionY + paint.ascent() - 25;
+        this.mainLeft = positionX - (mainWidth/2f) - 50;
         this.mainBottom = positionY + paint.descent() + 250;
+        this.mainRight = (positionX - (mainWidth/2f)) + mainWidth + 50;
 
+        // Sets the Rect values of the back and retry containers based on the text size and width
         paint.setTextSize(25);
-        retryWidth = (int) paint.measureText(retryText);
+        int retryWidth = (int) paint.measureText(retryText);
         this.retryX = positionX;
         this.retryY = positionY + 100;
-
-        this.retryLeft = retryX - (retryWidth/2) - 15;
-        this.retryRight = (retryX - (retryWidth/2)) + retryWidth + 15;
         this.retryTop = retryY + paint.ascent() - 15;
+        this.retryLeft = retryX - (retryWidth/2f) - 15;
         this.retryBottom = retryY + paint.descent() + 15;
+        this.retryRight = (retryX - (retryWidth/2f)) + retryWidth + 15;
 
-        backWidth = (int) paint.measureText(backText);
-
+        int backWidth = (int) paint.measureText(backText);
         this.backX = positionX;
         this.backY = positionY + 200;
-
-        this.backLeft = retryX - (backWidth/2) - 15;
-        this.backRight = (retryX - (backWidth/2)) + backWidth + 15;
         this.backTop = backY + paint.ascent() - 15;
+        this.backLeft = retryX - (backWidth/2f) - 15;
         this.backBottom = backY + paint.descent() + 15;
+        this.backRight = (retryX - (backWidth/2f)) + backWidth + 15;
 
         backgroundPaint = new Paint();
         backgroundPaint.setColor(ContextCompat.getColor(context, R.color.game_over_background));
@@ -92,10 +91,12 @@ public class GameOver {
 
     public void draw(Canvas canvas)
     {
+        // Draws a containing rectangle for each text option
         canvas.drawRect(mainLeft, mainTop, mainRight, mainBottom, backgroundPaint);
         canvas.drawRect(retryLeft, retryTop, retryRight, retryBottom, rectPaint);
         canvas.drawRect(backLeft, backTop, backRight, backBottom, rectPaint);
 
+        // Draws the text itself
         paint.setTextSize(75);
         canvas.drawText("GAME OVER", positionX, positionY, paint);
 
@@ -104,4 +105,3 @@ public class GameOver {
         canvas.drawText(backText, positionX, backY, paint);
     }
 }
-

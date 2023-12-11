@@ -14,19 +14,20 @@ public class User
 
     @NonNull
     @ColumnInfo(name = "user_name")
-    private String user_name;
 
+    private String user_name;
     private double snake_high_score = 0;
     private double breakout_high_score = 0;
     private double tilter_high_score = 0;
     private double pong_high_score = 0;
 
     // Getters and setters
+    @NonNull
     public String getUser_name() {
         return user_name;
     }
 
-    public void setUser_name(String user_name) {
+    public void setUser_name(@NonNull String user_name) {
         this.user_name = user_name;
     }
 

@@ -21,13 +21,8 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity
 {
+    // Default username
     private String username = "Anonymous";
-    public void setUsername(String username) {
-        this.username = username;
-    }
-    public String getUsername() {
-        return this.username;
-    }
     public UserDAO userDAO;
 
     @Override
@@ -49,10 +44,13 @@ public class MainActivity extends AppCompatActivity
         // Button to set username
         Button userNameButton = (Button) findViewById(R.id.userNameButton);
         EditText userNameField = (EditText) findViewById(R.id.userNameField);
-        userNameButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
+        // Set user name button
+        userNameButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
                 String username = userNameField.getText().toString().toUpperCase();
                 MainActivity.this.setUsername(username);
                 String name = MainActivity.this.username;
@@ -61,7 +59,7 @@ public class MainActivity extends AppCompatActivity
                 List<User> users = DAO.loadAllUsers();
                 Log.d("DEBUG", users.toString());
 
-                Boolean dbContatinsName = false;
+                boolean dbContatinsName = false;
                 for(int i = 0; i < users.size(); i++) {
                     if (users.get(i).getUser_name().equals(name)) {
                         dbContatinsName = true;
@@ -96,5 +94,13 @@ public class MainActivity extends AppCompatActivity
                 startActivity(intent);
             }
         });
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getUsername() {
+        return this.username;
     }
 }

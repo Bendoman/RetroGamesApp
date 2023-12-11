@@ -4,14 +4,16 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
-public class TilterPlayingField {
+public class TilterPlayingField
+{
     public Paint paint;
     public int positionX;
     public int positionY;
     public int playingFieldWidth;
     public int playingFieldHeight;
 
-    public TilterPlayingField(Canvas canvas) {
+    public TilterPlayingField(Canvas canvas)
+    {
         playingFieldWidth = (int) canvas.getWidth() - 200;
         playingFieldHeight = (int) canvas.getHeight() - 350;
 
@@ -19,9 +21,9 @@ public class TilterPlayingField {
         positionY = 100;
 
         paint = new Paint();
+        paint.setStrokeWidth(3);
         paint.setColor(Color.WHITE);
         paint.setStyle(Paint.Style.STROKE);
-        paint.setStrokeWidth(3);
     }
 
     public void draw(Canvas canvas) {
