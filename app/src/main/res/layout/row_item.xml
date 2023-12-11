@@ -2,7 +2,7 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#E0CAD3DB"
+    android:background="#BF0F0C54"
     >
 
     <ImageView
@@ -16,24 +16,27 @@
     />
 
     <TextView
+        android:textAllCaps="true"
+        android:textStyle="bold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
         android:layout_marginLeft="10dp"
         android:textSize="30dp"
-        android:textColor="#1E90FF"
+        android:textColor="#FFF"
         android:id="@+id/gameNameTextView"
         android:layout_row="0"
         android:layout_column="1"
     />
 
     <TextView
+        android:textAllCaps="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
         android:layout_marginLeft="10dp"
         android:textSize="15dp"
-        android:textColor="#4B0082"
+        android:textColor="@color/magenta"
         android:id="@+id/highScoreTextView"
         android:layout_row="1"
         android:layout_column="1"
