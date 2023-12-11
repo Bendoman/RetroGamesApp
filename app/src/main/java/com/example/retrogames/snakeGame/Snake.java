@@ -63,14 +63,20 @@ public class Snake
         paint.setColor(ContextCompat.getColor(context, R.color.player));
     }
 
-    private void addFruit() {
-        while(true) {
+    private void addFruit()
+    {
+        while(true)
+        {
             int randomXPosition = new Random().nextInt((int) (playingFieldWidth - size) / size);
             int randomYPosition = new Random().nextInt((int) (playingFieldHeight - size) / size);
             int fruitPositionX = (size * randomXPosition) + size;
             int fruitPositionY = (size * randomYPosition) + size;
 
-            boolean validCoordinates = false;
+            // Generates valid coordinates for the fruit that don't
+            // intersect with the snake head or body
+            if(fruitPositionX == positionX && fruitPositionY == positionY)
+                continue;
+            boolean validCoordinates = true;
             for (int i = 0; i < snakeBody.size(); i++) {
                 validCoordinates = true;
                 if (fruitPositionX == snakeBody.get(i).left && fruitPositionY == snakeBody.get(i).top) {
