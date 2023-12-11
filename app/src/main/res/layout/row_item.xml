@@ -2,7 +2,7 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#BF0F0C54"
+    android:background="#BF0C2954"
     >
 
     <ImageView
@@ -34,9 +34,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_columnSpan="1"
+        android:textStyle="bold"
         android:layout_marginLeft="10dp"
         android:textSize="15dp"
-        android:textColor="@color/magenta"
+        android:textColor="@color/deep_magenta"
         android:id="@+id/highScoreTextView"
         android:layout_row="1"
         android:layout_column="1"
