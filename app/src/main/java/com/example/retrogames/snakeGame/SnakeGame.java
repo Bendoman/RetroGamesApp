@@ -2,11 +2,8 @@ package com.example.retrogames.snakeGame;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
-import android.media.SoundPool;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -16,7 +13,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
-import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -177,10 +173,10 @@ public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, Ga
         String score = Integer.toString(this.score);
         String level = Integer.toString(this.level);
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        int color = ContextCompat.getColor(getContext(), R.color.deep_magenta);
         paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("Score: " + score, (canvas.getWidth()/2 + 200), canvas.getHeight() - 115, paint);
-        canvas.drawText("Level: " + level, (canvas.getWidth()/2 + 200), canvas.getHeight() - 65, paint);
+        paint.setTextSize(40);
+        canvas.drawText("SCORE: " + score, (canvas.getWidth()/2 + 200), canvas.getHeight() - 115, paint);
+        canvas.drawText("LEVEL: " + level, (canvas.getWidth()/2 + 200), canvas.getHeight() - 45, paint);
     }
 }

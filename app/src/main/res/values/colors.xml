@@ -5,7 +5,8 @@
     <color name="magenta">#FF09FF</color>
     <color name="player">#FFF</color>
     ball_inner
-    <color name="ball_outer">#990099</color>
+    <color name="ball_outer">#490249</color>
+    <color name="ball_second_ring">#940294</color>
     <color name="ball_inner">#ff00ff</color>
 
     <color name="joystick_outer">#222745</color>
@@ -13,6 +14,8 @@
 
     <color name="info_background">#540D6E</color>
 
-    <color name="game_over_background">#540D6E</color>
-    <color name="game_over_text">#2DE2E6</color>
+    <color name="game_over_background">#5C410657</color>
+    <color name="game_over_text">#DE004E</color>
+
+    <color name="deep_magenta">#DE004E</color>
 </resources>

@@ -138,6 +138,12 @@ public class GameInfo extends AppCompatActivity
                 }
             }
         });
+
+        Button backToMenu = (Button) findViewById(id.backToMenu);
+        backToMenu.setOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View view) { finish(); }
+        });
+
     }
 
     @Override

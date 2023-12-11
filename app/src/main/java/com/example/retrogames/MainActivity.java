@@ -55,20 +55,6 @@ public class MainActivity extends AppCompatActivity
 
                 String username = userNameField.getText().toString().toUpperCase();
                 MainActivity.this.setUsername(username);
-                Toast.makeText(MainActivity.this, "Username set to " + MainActivity.this.getUsername(), Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Button to start games list activity
-        Button listButton = (Button) findViewById(R.id.listButton);
-        listButton.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View view)
-            {
-                MainActivity.this.username = MainActivity.this.username;
-                if(MainActivity.this.username.equals(""))
-                    MainActivity.this.username = "Anonymous";
                 String name = MainActivity.this.username;
 
                 UserDAO DAO = MainActivity.this.userDAO;
@@ -89,6 +75,21 @@ public class MainActivity extends AppCompatActivity
 
                     DAO.insertUser(user);
                 }
+
+                Toast.makeText(MainActivity.this, "Username set to " + MainActivity.this.getUsername(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Button to start games list activity
+        Button listButton = (Button) findViewById(R.id.listButton);
+        listButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View view)
+            {
+                if(MainActivity.this.username.equals(""))
+                    MainActivity.this.username = "Anonymous";
+                String name = MainActivity.this.username;
 
                 Intent intent = new Intent(MainActivity.this, GamesListActivity.class);
                 intent.putExtra("username", name);

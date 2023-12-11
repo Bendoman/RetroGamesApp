@@ -1,13 +1,11 @@
 package com.example.retrogames.tilterGame;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -16,7 +14,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
-import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -118,12 +115,12 @@ public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, G
         String score = Integer.toString(this.score);
         String level = Integer.toString(this.level);
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        int color = ContextCompat.getColor(getContext(), R.color.deep_magenta);
         paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("Score: " + score, playingField.positionX,
+        paint.setTextSize(40);
+        canvas.drawText("SCORE: " + score, playingField.positionX,
                 playingField.positionY + playingField.playingFieldHeight + 65, paint);
-        canvas.drawText("Level: " + level, playingField.positionX,
+        canvas.drawText("LEVEL: " + level, playingField.positionX,
                 playingField.positionY + playingField.playingFieldHeight + 115, paint);
     }
 

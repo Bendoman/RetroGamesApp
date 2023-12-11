@@ -17,7 +17,9 @@
         android:text="GAMES LIST"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/userNameButton" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameButton"
+        app:strokeColor="@color/white"
+        app:strokeWidth="1dp" />
 
     <TextView
         android:id="@+id/title"
@@ -39,7 +41,8 @@
         android:id="@+id/userNameButton"
         android:layout_width="wrap_content"
         android:backgroundTint="@color/info_background"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"        app:strokeColor="@color/white"
+        app:strokeWidth="1dp"
         android:layout_marginTop="30dp"
         android:text="SET USERNAME"
         app:layout_constraintEnd_toEndOf="parent"

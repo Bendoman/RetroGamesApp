@@ -1,120 +1,74 @@
 package com.example.retrogames.tilterGame;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
-import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.content.res.Configuration;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.AudioAttributes;
-import android.media.SoundPool;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.view.Window;
-import android.view.WindowManager;
 
-import com.example.retrogames.R;
-import com.example.retrogames.database.DAOs.UserDAO;
-import com.example.retrogames.database.UserDatabase;
-import com.example.retrogames.database.entities.User;
-import com.example.retrogames.gameUtilities.Constants;
-import com.example.retrogames.gameUtilities.GameOver;
-import com.example.retrogames.pongGame.PongGame;
+import com.example.retrogames.gameUtilities.GameMainActivity;
 
-public class TilterMainActivity extends Activity implements SensorEventListener {
-
-    private User user;
-    public UserDAO userDAO;
-    private String username;
-    private TilterGame game;
+public class TilterMainActivity extends GameMainActivity implements SensorEventListener
+{
     private SensorManager sensorManager;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_tilter_main);
-
-        // Database setup
-        Intent intent = getIntent();
-        username = intent.getExtras().getString("username");
-
-        userDAO = Room.databaseBuilder(this, UserDatabase.class, "user-database")
-                .allowMainThreadQueries().build().getUserDAO();
-        user = userDAO.getUserByName(username);
-
-        Window window = getWindow();
-        window.setFlags(
-                WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN
-        );
 
         // Get a reference to SensorManager
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
-        
-        game = new TilterGame(this, this);
-        setContentView(game);
+
+        this.game = new TilterGame(this, this);
+        setContentView((TilterGame) this.game);
     }
 
-
-    public void finishActivity() {
-        updateScores();
-
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("score", game.getScore());
-        setResult(RESULT_OK, returnIntent);
-        finish();
-    }
-
-    public void restart() {
-        updateScores();
-        recreate();
-    }
-
-    @Override
-    public void onBackPressed() {
-        updateScores();
-        finishActivity();
-    }
-
-    public void updateScores() {
-        if(game.getScore() > user.getTilter_high_score()) {
+    // Updates the database
+    public void updateScores()
+    {
+        // If the current game score is greater than the user's high score, update the field
+        if(game.getScore() > user.getTilter_high_score())
+        {
             user.setTilter_high_score(game.getScore());
             userDAO.updateUser(user);
         }
     }
 
+    // Takes the change in Gyroscope values and updates the acceleration values in the game
     @Override
-    public void onSensorChanged(SensorEvent event) {
+    public void onSensorChanged(SensorEvent event)
+    {
         if(event.sensor.getType() == Sensor.TYPE_GYROSCOPE)
         {
             float xAcceleration = event.values[1];
             float yAcceleration = event.values[0];
 
-            game.updateAcceleration(xAcceleration, yAcceleration);
+            // Casting to TilterGame as the other games do not implement updateAcceleration()
+            TilterGame g = (TilterGame) game;
+            g.updateAcceleration(xAcceleration, yAcceleration);
         }
     }
 
+    // Unregister the listener on stop so that the app doesn't crash
     @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // Re-register on reload
-        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
-    }
-
-    @Override
-    protected void onStop() {
-        // Unregister the listener so that the app doesn't crash
+    protected void onStop()
+    {
         sensorManager.unregisterListener(this);
         super.onStop();
     }
+
+    // Re-register the listener on reload
+    @Override
+    protected void onResume()
+    {
+        super.onResume();
+
+        sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE), SensorManager.SENSOR_DELAY_GAME);
+    }
+
+    // Unused but implemented from interface
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {}
 }

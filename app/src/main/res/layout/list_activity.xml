@@ -16,7 +16,7 @@
         android:id="@+id/games_list"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#55FFFFFF"
+        android:background="@drawable/layout_background"
         android:padding="15dp"
         />
 </RelativeLayout>

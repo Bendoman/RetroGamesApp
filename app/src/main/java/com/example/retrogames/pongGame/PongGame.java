@@ -3,7 +3,6 @@ package com.example.retrogames.pongGame;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Paint;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -12,9 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
-import com.example.retrogames.gameUtilities.BouncingBall;
-import com.example.retrogames.breakoutGame.BreakoutGame;
-import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.MovablePaddle;
@@ -127,11 +123,11 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
         String score = Integer.toString(this.score);
         String level = Integer.toString(this.level);
         Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
+        int color = ContextCompat.getColor(getContext(), R.color.deep_magenta);
         paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("Score: " + score, (canvas.getWidth()/2 + 150), canvas.getHeight() - 125, paint);
-        canvas.drawText("Level: " + level, (canvas.getWidth()/2 + 150), canvas.getHeight() - 75, paint);
+        paint.setTextSize(40);
+        canvas.drawText("SCORE: " + score, (canvas.getWidth()/2 + 150), canvas.getHeight() - 170, paint);
+        canvas.drawText("LEVEL: " + level, (canvas.getWidth()/2 + 150), canvas.getHeight() - 85, paint);
     }
 
     @Override
@@ -176,6 +172,15 @@ public class PongGame extends SurfaceView implements SurfaceHolder.Callback, Gam
     @Override
     public void addScore(int i) {
         this.score += i;
+        if(score % 5 == 0)
+        {
+            level++;
+            if(level < 5) {
+                player1.reduceSize();
+                player2.reduceSize();
+            }
+        }
+
     }
     @Override
     public double getScore() { return this.score; }

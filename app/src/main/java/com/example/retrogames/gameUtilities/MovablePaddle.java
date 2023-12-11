@@ -23,7 +23,6 @@ public class MovablePaddle implements GameObject {
     private double height;
     private Paint paint;
     private double canvasWidth = 0;
-
     private double canvasHeight = 0;
 
     private double velocityX;
@@ -64,9 +63,7 @@ public class MovablePaddle implements GameObject {
             positionX = canvasWidth - length;
     }
 
-    public void setPosition(double positionX) {
-            this.positionX  = positionX;
-    }
+    public void reduceSize() { this.length -= 25; }
     public double getPositionX() {
         return positionX;
     }

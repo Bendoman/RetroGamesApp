@@ -11,8 +11,6 @@ import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
-import com.example.retrogames.gameUtilities.BouncingBall;
-import com.example.retrogames.gameUtilities.Constants;
 import com.example.retrogames.gameUtilities.GameClass;
 import com.example.retrogames.gameUtilities.GameLoop;
 import com.example.retrogames.gameUtilities.GameObject;
@@ -26,23 +24,23 @@ import java.util.List;
 //Manages all objects in the game
 public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback, GameClass {
     private static final int MAX_BRICK_LAYERS = 10;
-    private MovablePaddle player;
-    private Joystick joystick;
-    private GameLoop gameLoop;
-    public GameOver gameOverText;
+
     private BreakoutBall ball;
-
-    private int brickLayers = 1;
-    private int firstBrickLayerY = 10;
-
-    private int score;
-
+    private GameLoop gameLoop;
+    private Joystick joystick;
+    private MovablePaddle player;
+    public GameOver gameOverText;
     List<GameObject> gameObjects;
-    private int level = 1;
-    private boolean isRunning = true;
     private BreakoutMainActivity main;
 
-    public BreakoutGame(Context context, BreakoutMainActivity main) {
+    private int score = 0;
+    private int level = 1;
+    private int brickLayers = 1;
+    private boolean isRunning = true;
+    private final int firstBrickLayerY = 10;
+
+    public BreakoutGame(Context context, BreakoutMainActivity main)
+    {
         super(context);
         this.main = main;
 
@@ -51,26 +49,28 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
         surfaceHolder.addCallback(this);
 
         gameLoop = new GameLoop(this, surfaceHolder, 60);
-        score = 0;
-
         setFocusable(true);
     }
+
     public void initObjects(Canvas canvas)
     {
         // Initialize game objects
         gameObjects = new ArrayList<GameObject>();
+        gameOverText = new GameOver(canvas, getContext());
         joystick = new Joystick(getContext(), canvas.getWidth()/2, canvas.getHeight()-140, 70, 40);
         player = new MovablePaddle(getContext(), 500, 1500, 250, 50, gameLoop.maxUPS);
         gameObjects.add(player);
-        initBricks(canvas);
 
-        ball = new BreakoutBall(getContext(), this, gameObjects, 500, 500, 25, 60);
-        gameOverText = new GameOver(canvas, getContext());
+        // Add the first layer of bricks
+        initBricks(canvas);
+        ball = new BreakoutBall(getContext(), this, gameObjects, 600,  600, 25, 60);
     }
 
     public void initBricks(Canvas canvas)
     {
-        for (int x = 0; x < brickLayers; x ++) {
+        // Creates a row of brick objects for every brick layer and adds them to gameObjects
+        for (int x = 0; x < brickLayers; x ++)
+        {
             for(int i = 0; i < canvas.getWidth(); i+=110)
             {
                 BreakoutBrick brick = new BreakoutBrick(getContext(), i, firstBrickLayerY + (x * 60), 100, 50);
@@ -80,23 +80,27 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     }
 
     @Override
-    public boolean onTouchEvent(MotionEvent event) {
+    public boolean onTouchEvent(MotionEvent event)
+    {
         // Handle touch event actions
         switch(event.getAction()){
             case MotionEvent.ACTION_DOWN:
-                if(joystick.isPressed((double) event.getX(), (double) event.getY())) {
+                // Checks if the user clicked on the joystick
+                if(joystick.isPressed(event.getX(), event.getY()))
                     joystick.setIsPressed(true);
-                }
                 return true;
             case MotionEvent.ACTION_MOVE:
-                if(joystick.getIsPressed()) {
-                    joystick.setActuator((double) event.getX(), (double) event.getY());
-                }
+                // Adjusts the joystick actuator positions based on the current moust position
+                if(joystick.getIsPressed())
+                    joystick.setActuator(event.getX(), event.getY());
                 return true;
             case MotionEvent.ACTION_UP:
+                // Resets the joystick pressed status and actuator values
                 joystick.setIsPressed(false);
                 joystick.resetActuator();
 
+                // If the game is over this code will allow the
+                // user to press the menu buttons that appear
                 if (!isRunning)
                 {
                     float x = event.getX();
@@ -107,12 +111,14 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
                     else if(x > g.backLeft && x < g.backRight && y > g.backTop && y < g.backBottom)
                         main.finishActivity();
                 }
-
                 return true;
         }
-
         return super.onTouchEvent(event);
     }
+
+    // Ends the game if the surface is destroyed to avoid crashes
+    @Override
+    public void surfaceDestroyed(@NonNull SurfaceHolder holder) { endGame(); }
 
     @Override
     public void surfaceCreated(@NonNull SurfaceHolder holder) { gameLoop.startLoop(); }
@@ -120,46 +126,13 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
     @Override
     public void surfaceChanged(@NonNull SurfaceHolder holder, int format, int width, int height) {}
 
-    @Override
-    public void surfaceDestroyed(@NonNull SurfaceHolder holder) { endGame(); }
-
-    @Override
-    public void draw(Canvas canvas) {
-        super.draw(canvas);
-
-        drawScore(canvas);
-
-        joystick.draw(canvas);
-        ball.draw(canvas);
-
-        for(int i = 0; i < gameObjects.size(); i++)
-        {
-            gameObjects.get(i).draw(canvas);
-        }
-
-        if(!isRunning)
-        {
-            gameOverText.draw(canvas);
-            endGame();
-        }
-    }
-
-    public void drawScore(Canvas canvas) {
-        String score = Integer.toString(this.score);
-        String level = Integer.toString(this.level);
-        Paint paint = new Paint();
-        int color = ContextCompat.getColor(getContext(), R.color.magenta);
-        paint.setColor(color);
-        paint.setTextSize(50);
-        canvas.drawText("Score: " + score, (canvas.getWidth()/2 + 150), canvas.getHeight() - 125, paint);
-        canvas.drawText("Level: " + level, (canvas.getWidth()/2 + 150), canvas.getHeight() - 75, paint);
-    }
+    // Updates the position and other values of all game elements. Called by the gameLoop.
     public void update(Canvas canvas) {
         joystick.update();
         player.update(joystick);
         ball.update();
 
-        // All bricks have been removed, the 1 left over is the player object
+        // If size == 1; All bricks have been removed, the 1 left over is the player object
         if(gameObjects.size() == 1)
         {
             // Increases level
@@ -170,29 +143,58 @@ public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback,
             // Re-initialize all the brick objects
             initBricks(canvas);
 
+            // Increases the balls speed for every level
             ball.increaseSpeed();
         }
     }
 
+    // Draw method that gets called by the gameLoop
+    @Override
+    public void draw(Canvas canvas) {
+        super.draw(canvas);
+
+        drawScore(canvas);
+        joystick.draw(canvas);
+        ball.draw(canvas);
+
+        // Draws each item in the gameObjects list
+        for(int i = 0; i < gameObjects.size(); i++)
+            gameObjects.get(i).draw(canvas);
+
+        if(!isRunning) {
+            // Displays the game over screen if the game is stopped
+            gameOverText.draw(canvas);
+            endGame(); // Ends the game loop
+        }
+    }
+
+    // Draws the game score and level values
+    public void drawScore(Canvas canvas) {
+        Paint paint = new Paint();
+        String score = Integer.toString(this.score);
+        String level = Integer.toString(this.level);
+
+        paint.setColor(ContextCompat.getColor(getContext(), R.color.deep_magenta));
+        paint.setTextSize(40);
+        canvas.drawText("SCORE: " + score, (canvas.getWidth()/2f + 150), canvas.getHeight() - 155, paint);
+        canvas.drawText("LEVEL: " + level, (canvas.getWidth()/2f + 150), canvas.getHeight() - 80, paint);
+    }
+
+    // Removes object from gameObjects list
     public void removeObject(GameObject rect) {
         gameObjects.remove(rect);
     }
 
-    public void endGame() {
-        // Stop updating the game
-        gameLoop.endLoop();
-    }
+    // Stop updating the game
+    @Override
+    public void endGame() { gameLoop.endLoop(); }
 
     @Override
-    public void gameOver() {
-        isRunning = false;
-    }
+    public void gameOver() { isRunning = false; }
 
-    public void addScore(int i) {
-        this.score += i;
-    }
+    @Override
+    public void addScore(int i) { this.score += i; }
 
-    public double getScore() {
-        return score;
-    }
+    @Override
+    public double getScore() { return score; }
 }

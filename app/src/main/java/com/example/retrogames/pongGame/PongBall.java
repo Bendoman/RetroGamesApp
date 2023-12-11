@@ -33,9 +33,19 @@ public class PongBall extends BouncingBall {
             {
                 game.addScore(1);
 
-                if (positionX < rect.getPositionX() || positionX > rect.getPositionX()+rect.getLength())
+                if (rect.getVelocityX() != 0) // Rect is moving
+                {
+                    if(velocityY < 0)
+                        positionY = rect.getPositionY() + rect.getHeight() + radius + 1;
+                    else
+                        positionY = rect.getPositionY() - radius - 1;
+                }
+
+                if (positionX < rect.getPositionX() || positionX > rect.getPositionX()+rect.getLength()) {
                     velocityX = -velocityX;
+                }
                 velocityY = -velocityY;
+
             }
         }
 

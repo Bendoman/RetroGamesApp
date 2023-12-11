@@ -18,6 +18,12 @@ public class GameOver {
     public final float backTop;
     public final float backBottom;
     private final Paint rectPaint;
+    private final float mainLeft;
+    private final float mainRight;
+    private final float mainTop;
+    private final float mainBottom;
+    private Paint backgroundPaint;
+    private int mainWidth;
     public float backLeft;
     public float backRight;
     public float retryLeft;
@@ -48,6 +54,13 @@ public class GameOver {
         this.positionX = (canvas.getWidth() / 2);
         this.positionY = (int) ((canvas.getHeight() / 2) - ((paint.descent() + paint.ascent()) / 2));
 
+        paint.setTextSize(75);
+        mainWidth = (int) paint.measureText(retryText);
+        this.mainLeft = positionX - (mainWidth/2) - 50;
+        this.mainRight = (positionX - (mainWidth/2)) + mainWidth + 50;
+        this.mainTop = positionY + paint.ascent() - 25;
+        this.mainBottom = positionY + paint.descent() + 250;
+
         paint.setTextSize(25);
         retryWidth = (int) paint.measureText(retryText);
         this.retryX = positionX;
@@ -68,13 +81,18 @@ public class GameOver {
         this.backTop = backY + paint.ascent() - 15;
         this.backBottom = backY + paint.descent() + 15;
 
+        backgroundPaint = new Paint();
+        backgroundPaint.setColor(ContextCompat.getColor(context, R.color.game_over_background));
+        backgroundPaint.setStyle(Paint.Style.FILL);
+
         rectPaint = new Paint();
-        rectPaint.setColor(ContextCompat.getColor(context, R.color.game_over_background));
+        rectPaint.setColor(ContextCompat.getColor(context, R.color.game_over_text));
         rectPaint.setStyle(Paint.Style.FILL);
     }
 
     public void draw(Canvas canvas)
     {
+        canvas.drawRect(mainLeft, mainTop, mainRight, mainBottom, backgroundPaint);
         canvas.drawRect(retryLeft, retryTop, retryRight, retryBottom, rectPaint);
         canvas.drawRect(backLeft, backTop, backRight, backBottom, rectPaint);
 

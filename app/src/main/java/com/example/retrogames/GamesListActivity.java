@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -72,18 +73,33 @@ public class GamesListActivity extends AppCompatActivity
         header = new TextView(this);
         header.setTextSize(20);
         header.setGravity(Gravity.CENTER);
-        header.setText("Username: " + username);
+        header.setText("USERNAME: " + username.toUpperCase());
+        header.setTextColor(Color.WHITE);
         header.setTypeface(Typeface.DEFAULT_BOLD);
         header.setPadding(35, 35, 35, 35);
-        header.setBackgroundColor(Color.parseColor("#5400C2C9"));
+        header.setBackgroundColor(Color.parseColor("#DE004E"));
 
         // Initializing list View
         listView = (ListView) findViewById(R.id.games_list);
         listView.addHeaderView(header);
 
+        Button footerButton = new Button(this);
+        footerButton.setTextSize(20);
+        footerButton.setText("RETURN");
+        footerButton.setTextColor(Color.WHITE);
+        footerButton.setBackgroundColor(Color.parseColor("#DE004E"));
+        footerButton.setTypeface(Typeface.DEFAULT_BOLD);
+        listView.addFooterView(footerButton);
+
         user = userDAO.getUserByName(username);
         loadList();
 
+        footerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {

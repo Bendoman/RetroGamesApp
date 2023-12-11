@@ -25,9 +25,6 @@
             android:name=".breakoutGame.BreakoutMainActivity"
             android:exported="false" />
         <activity
-            android:name=".breakoutGame.SnakeActivity"
-            android:exported="false" />
-        <activity
             android:name=".GameInfo"
             android:exported="false" />
         <activity
