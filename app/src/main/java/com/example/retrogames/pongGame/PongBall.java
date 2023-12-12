@@ -8,6 +8,9 @@ import com.example.retrogames.gameUtilities.GameObject;
 
 import java.util.List;
 
+/**
+ * Extension of the BouncingBall class that implements game logic specific to Pong
+ */
 public class PongBall extends BouncingBall
 {
     public PongBall(Context context, GameClass game, List<GameObject> gameObjects,

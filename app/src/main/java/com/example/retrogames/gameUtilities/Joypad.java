@@ -5,6 +5,9 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 
+/**
+ * JoyPad used to control movable paddles
+ */
 public class Joypad
 {
     private boolean isPressed;

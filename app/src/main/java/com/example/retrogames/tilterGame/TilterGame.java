@@ -21,6 +21,9 @@ import com.example.retrogames.gameUtilities.GameObject;
 import com.example.retrogames.gameUtilities.GameOver;
 
 
+/**
+ * Handles initializing, updating and drawing all objects related to the tilter game
+ */
 @SuppressLint("ViewConstructor")
 public class TilterGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
 {

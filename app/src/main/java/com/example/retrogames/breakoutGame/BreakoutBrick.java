@@ -10,7 +10,7 @@ import com.example.retrogames.R;
 import com.example.retrogames.gameUtilities.GameObject;
 
 /**
- * Game object for breakout.
+ * Game object for breakout game that will be destroyed by the breakout ball
  */
 public class BreakoutBrick implements GameObject
 {

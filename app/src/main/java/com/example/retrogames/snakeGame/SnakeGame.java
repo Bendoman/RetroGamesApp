@@ -20,6 +20,9 @@ import com.example.retrogames.gameUtilities.GameObject;
 import com.example.retrogames.gameUtilities.GameOver;
 import com.example.retrogames.gameUtilities.Joypad;
 
+/**
+ * Handles initializing, updating and drawing all objects related to the snake game
+ */
 @SuppressLint("ViewConstructor")
 public class SnakeGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
 {

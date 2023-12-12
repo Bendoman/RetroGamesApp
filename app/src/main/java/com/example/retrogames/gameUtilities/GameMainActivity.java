@@ -15,6 +15,9 @@ import com.example.retrogames.database.entities.User;
 
 import java.util.Objects;
 
+/**
+ * The activity that all game activities extend
+ */
 public class GameMainActivity extends Activity {
     protected User user;
     protected UserDAO userDAO;

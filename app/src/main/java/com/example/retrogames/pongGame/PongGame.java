@@ -22,6 +22,9 @@ import com.example.retrogames.gameUtilities.Joystick;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles initializing, updating and drawing all objects related to the pong game
+ */
 @SuppressLint("ViewConstructor")
 public class PongGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
 {

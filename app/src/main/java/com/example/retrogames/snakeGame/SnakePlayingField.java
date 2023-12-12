@@ -4,6 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+/**
+ * Playing field object that defines the grid in which the snake can be drawn
+ */
 public class SnakePlayingField
 {
     public Paint paint;

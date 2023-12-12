@@ -22,6 +22,9 @@ import com.example.retrogames.gameUtilities.MovablePaddle;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Handles initializing, updating and drawing all objects related to the breakout game
+ */
 @SuppressLint("ViewConstructor")
 public class BreakoutGame extends SurfaceView implements SurfaceHolder.Callback, GameClass
 {

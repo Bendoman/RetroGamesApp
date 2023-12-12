@@ -28,6 +28,9 @@ import com.example.retrogames.pongGame.PongMainActivity;
 import com.example.retrogames.snakeGame.SnakeMainActivity;
 import com.example.retrogames.tilterGame.TilterMainActivity;
 
+/**
+ * Displays relevant information about the selected game allows the game activity to be launched
+ */
 public class GameInfo extends AppCompatActivity
 {
     // For detecting swipe gesture

@@ -8,6 +8,9 @@ import android.os.Bundle;
 
 import com.example.retrogames.gameUtilities.GameMainActivity;
 
+/**
+ * The activity associated with the tilter game
+ */
 public class TilterMainActivity extends GameMainActivity implements SensorEventListener
 {
     private SensorManager sensorManager;

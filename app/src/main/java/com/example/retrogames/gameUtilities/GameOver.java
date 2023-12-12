@@ -11,6 +11,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 
+/**
+ * The text and menu items that are displayed when a game's fail state is reached
+ */
 public class GameOver
 {
     // Menu box paints

@@ -19,6 +19,9 @@ import com.example.retrogames.database.entities.User;
 
 import java.util.List;
 
+/**
+ * Entrypoint for app
+ */
 public class MainActivity extends AppCompatActivity
 {
     // Default username

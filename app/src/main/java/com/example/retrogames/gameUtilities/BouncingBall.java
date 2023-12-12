@@ -10,6 +10,10 @@ import com.example.retrogames.R;
 
 import java.util.List;
 
+/**
+ * Bouncing ball object that is extended by the ball objects for each game.
+ * Implements the base functionality relevant to each.
+ */
 public class BouncingBall
 {
     // Tying the maximum speed to number of pixel per second by relating it to the UPS

@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * Implements the game logic for updating the snake, its body
+ * and the fruit that must be collected by it.
+ */
 public class Snake
 {
     private final Paint paint;

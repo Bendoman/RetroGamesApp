@@ -11,6 +11,9 @@ import com.example.retrogames.database.entities.User;
 
 import java.util.List;
 
+/**
+ * User data access object used for sending queries to the room database
+ */
 @Dao
 public interface UserDAO
 {

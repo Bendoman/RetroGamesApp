@@ -9,6 +9,10 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 
+/**
+ * Written and expanded upon with reference to the Joystick implementation in this project
+ * <a href="https://github.com/bukkalexander/AndroidStudio2DGameDevelopment">Reference</a>
+ */
 public class Joystick {
     private final Paint innerCirclePaint;
     private final Paint outerCirclePaint;
@@ -124,4 +128,4 @@ public class Joystick {
     public double getActuatorY() {
         return actuatorY;
     }
-}
+} // End reference

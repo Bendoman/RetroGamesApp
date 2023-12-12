@@ -3,6 +3,9 @@ package com.example.retrogames.pongGame;
 import android.os.Bundle;
 import com.example.retrogames.gameUtilities.GameMainActivity;
 
+/**
+ * The activity associated with the pong game
+ */
 public class PongMainActivity extends GameMainActivity
 {
     @Override

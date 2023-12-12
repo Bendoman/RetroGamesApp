@@ -121,4 +121,4 @@ public class GameLoop extends Thread
             }
         }
     }
-}
+} // End reference

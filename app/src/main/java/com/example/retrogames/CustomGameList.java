@@ -11,6 +11,9 @@ import android.widget.ArrayAdapter;
 
 import androidx.annotation.NonNull;
 
+/**
+ * Used as an adapter for the ListView of games in the GamesList activity
+ */
 public class CustomGameList extends ArrayAdapter
 {
     private final Integer[] images;

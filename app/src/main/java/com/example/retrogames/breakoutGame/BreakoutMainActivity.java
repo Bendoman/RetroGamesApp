@@ -4,6 +4,9 @@ import android.os.Bundle;
 
 import com.example.retrogames.gameUtilities.GameMainActivity;
 
+/**
+ * The activity associated with the breakout game
+ */
 public class BreakoutMainActivity extends GameMainActivity
 {
     @Override

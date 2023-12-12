@@ -10,6 +10,9 @@ import com.example.retrogames.gameUtilities.GameClass;
 
 import java.util.concurrent.ThreadLocalRandom;
 
+/**
+ * Extension of the BouncingBall class that implements game logic specific to tilter
+ */
 public class TilterBall extends BouncingBall
 {
     private int fruitPositionX;

@@ -6,6 +6,9 @@ import com.example.retrogames.database.DAOs.UserDAO;
 import com.example.retrogames.database.entities.User;
 import com.example.retrogames.gameUtilities.GameMainActivity;
 
+/**
+ * The activity associated with the snake game
+ */
 public class SnakeMainActivity extends GameMainActivity {
 
     @Override

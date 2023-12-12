@@ -2,6 +2,9 @@ package com.example.retrogames.gameUtilities;
 
 import android.graphics.Canvas;
 
+/**
+ * Game class interface used for each game
+ */
 public interface GameClass
 {
     void initObjects(Canvas canvas);

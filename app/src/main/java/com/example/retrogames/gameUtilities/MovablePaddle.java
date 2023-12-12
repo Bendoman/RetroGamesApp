@@ -8,6 +8,9 @@ import androidx.core.content.ContextCompat;
 
 import com.example.retrogames.R;
 
+/**
+ * Movable paddle object that the user will control with the passed joystick
+ */
 public class MovablePaddle implements GameObject
 {
     private final double MAX_SPEED;

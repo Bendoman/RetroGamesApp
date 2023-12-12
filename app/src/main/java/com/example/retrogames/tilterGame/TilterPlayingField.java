@@ -4,6 +4,9 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 
+/**
+ * Defines the area in which the tilter ball can be drawn without ending the game
+ */
 public class TilterPlayingField
 {
     public Paint paint;
