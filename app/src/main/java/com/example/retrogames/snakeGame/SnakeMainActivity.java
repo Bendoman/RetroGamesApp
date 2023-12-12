@@ -24,7 +24,7 @@ public class SnakeMainActivity extends GameMainActivity {
     public void updateScores()
     {
         // If the current game score is greater than the user's high score, update the field
-        if(game.getScore() > user.getBreakout_high_score())
+        if(game.getScore() > user.getSnake_high_score())
         {
             user.setSnake_high_score(game.getScore());
             userDAO.updateUser(user);
