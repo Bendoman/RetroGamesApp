@@ -29,7 +29,6 @@ public class CustomGameList extends ArrayAdapter
         this.highScoreStrings = highScoreStrings;
     }
 
-
     @NonNull
     @Override
     @SuppressLint("InflateParams")

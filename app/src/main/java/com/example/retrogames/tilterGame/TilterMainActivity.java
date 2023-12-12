@@ -26,11 +26,9 @@ public class TilterMainActivity extends GameMainActivity implements SensorEventL
     }
 
     // Updates the database
-    public void updateScores()
-    {
+    public void updateScores() {
         // If the current game score is greater than the user's high score, update the field
-        if(game.getScore() > user.getTilter_high_score())
-        {
+        if(game.getScore() > user.getTilter_high_score()) {
             user.setTilter_high_score(game.getScore());
             userDAO.updateUser(user);
         }

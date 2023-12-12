@@ -24,7 +24,6 @@ import com.example.retrogames.database.entities.User;
 
 /**
  * Class displaying list of available games and the user high scores associate with them.
- *
  */
 public class GamesListActivity extends AppCompatActivity
 {
@@ -150,8 +149,8 @@ public class GamesListActivity extends AppCompatActivity
             case MotionEvent.ACTION_UP:
                 float x2 = event.getX();
                 float deltaX = x1 - x2;
-                if (Math.abs(deltaX) > MIN_DISTANCE && x2 < x1 )
-                    this.onBackPressed();
+                if (Math.abs(deltaX) > MIN_DISTANCE && x2 > x1 )
+                    finish();
                 break;
         }
         return super.onTouchEvent(event);

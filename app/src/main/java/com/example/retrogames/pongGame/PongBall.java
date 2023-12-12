@@ -18,11 +18,8 @@ public class PongBall extends BouncingBall
     @Override
     public void update()
     {
-        // Checks if the ball is colliding with the edges of the screen
-        // and reverses its velocity if so. Only checks X position as Y hitting
-        // the top or the bottom is the fail state of the game
-        if(positionX - radius <= 0 || positionX + radius >= canvasWidth)
-            velocityX = -velocityX;
+        // As wall collision logic is the same for all games
+        super.update();
 
         // This for loop is for detecting collisions with the game objects ( Bricks and paddle )
         for(int i = 0; i < gameObjects.size(); i++)
